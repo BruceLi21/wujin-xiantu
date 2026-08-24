@@ -355,7 +355,7 @@ function render(){
 
 async function runAdventureOnce(z){
   if(state.energy<z.energy)return{ok:false,lines:["體力不足。"]};
-  state.energy-=z.energy;state.energyUpdatedAt=Date.now();
+  state.energyUpdatedAt=Date.now();
   const playerPower=totalPower()+Math.random()*8,enemyPower=z.difficulty*(.78+Math.random()*.55),monster=z.monsters[Math.floor(Math.random()*z.monsters.length)],lines=[`遭遇 ${monster}（我方 ${Math.round(playerPower)} / 敵方 ${Math.round(enemyPower)}）`];
   if(playerPower>=enemyPower){
     const cg=Math.round(25+z.difficulty*1.7+Math.random()*35),sg=Math.round(18+z.difficulty*2+Math.random()*40);
@@ -380,7 +380,7 @@ async function runAdventureBatch(zoneId,runs){
 
 async function runBoss(zoneId){
   const z=zones.find(x=>x.id===zoneId);if(!z||!state.bossReady[z.id]||state.energy<z.energy)return;
-  state.energy-=z.energy;state.energyUpdatedAt=Date.now();
+  state.energyUpdatedAt=Date.now();
   const playerPower=totalPower()+Math.random()*10,enemyPower=z.difficulty*1.35*(.9+Math.random()*.35),lines=[`Boss：${z.boss}`,`我方 ${Math.round(playerPower)} / Boss ${Math.round(enemyPower)}`];
   if(playerPower>=enemyPower){
     const cg=Math.round(100+z.difficulty*4),sg=Math.round(120+z.difficulty*5);
@@ -429,7 +429,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V11 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V12 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
@@ -481,3 +481,59 @@ $("resetBtn").addEventListener("click",async()=>{if(!confirm("確定重置所有
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"&&state)await writeSave()});
 if("serviceWorker"in navigator)navigator.serviceWorker.register("./service-worker.js").catch(console.warn);
 bootstrap().catch(err=>{console.error(err);alert("遊戲初始化失敗，請重新整理頁面。")});
+
+/* ===== V12 battle presentation layer ===== */
+window.V12Battle = window.V12Battle || {
+  running:false,
+  async play(opts){
+    if(this.running) return;
+    this.running=true;
+    const host=document.querySelector(opts.hostSelector || '#battleLog') ||
+               document.querySelector('.battle-log-compact') ||
+               document.querySelector('[data-battle-log]');
+    if(!host){ this.running=false; if(opts.onDone) opts.onDone(); return; }
+
+    const pMax=Math.max(1, Number(opts.playerHp||600));
+    const eMax=Math.max(1, Number(opts.enemyHp||300));
+    let p=pMax,e=eMax,round=0;
+    host.innerHTML=`<div class="v12-battle-live">
+      <div class="v12-fighter v12-enemy">
+        <div class="v12-fighter-head"><span>${opts.enemyName||'妖獸'}</span><span class="v12-e-num">${e}/${eMax}</span></div>
+        <div class="v12-hp"><i class="v12-e-bar"></i></div>
+      </div>
+      <div class="v12-fighter v12-player">
+        <div class="v12-fighter-head"><span>${opts.playerName||'你'}</span><span class="v12-p-num">${p}/${pMax}</span></div>
+        <div class="v12-hp"><i class="v12-p-bar"></i></div>
+      </div>
+      <div class="v12-roundlog"></div>
+      <div class="v12-battle-note">體力：∞　自動交戰中</div>
+    </div>`;
+    const log=host.querySelector('.v12-roundlog');
+    const pbar=host.querySelector('.v12-p-bar'), ebar=host.querySelector('.v12-e-bar');
+    const pnum=host.querySelector('.v12-p-num'), enum_=host.querySelector('.v12-e-num');
+
+    while(p>0 && e>0 && round<30){
+      round++;
+      const pAtk=Math.max(8, Math.round((opts.playerAtk||70)*(0.88+Math.random()*.24)));
+      const eDef=Math.max(0, opts.enemyDef||10);
+      const dealt=Math.max(1,pAtk-eDef);
+      e=Math.max(0,e-dealt);
+      log.innerHTML=`<div>第 ${round} 回合：你攻擊，造成 ${dealt} 傷害。</div>`+log.innerHTML;
+      ebar.style.width=(e/eMax*100)+'%'; enum_.textContent=`${e}/${eMax}`;
+      await new Promise(r=>setTimeout(r,650));
+      if(e<=0) break;
+
+      const eAtk=Math.max(5, Math.round((opts.enemyAtk||35)*(0.88+Math.random()*.24)));
+      const pDef=Math.max(0, opts.playerDef||12);
+      const taken=Math.max(1,eAtk-pDef);
+      p=Math.max(0,p-taken);
+      log.innerHTML=`<div>${opts.enemyName||'妖獸'}反擊，造成 ${taken} 傷害。</div>`+log.innerHTML;
+      pbar.style.width=(p/pMax*100)+'%'; pnum.textContent=`${p}/${pMax}`;
+      await new Promise(r=>setTimeout(r,650));
+    }
+    log.innerHTML=`<div><b>${e<=0?'戰鬥勝利！':'戰鬥結束。'}</b></div>`+log.innerHTML;
+    await new Promise(r=>setTimeout(r,500));
+    this.running=false;
+    if(opts.onDone) opts.onDone(e<=0);
+  }
+};
