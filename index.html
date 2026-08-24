@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="無盡仙途" />
-  <title>無盡仙途 V0.8.3</title>
+  <title>無盡仙途 V0.9</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" href="./css/game.css" />
 </head>
@@ -19,7 +19,7 @@
         <h1>無盡仙途</h1>
       </div>
       <div class="top-actions">
-        <span class="version">V0.8.3</span>
+        <span class="version">V0.9</span>
         <button id="resetBtn" class="ghost-btn" type="button">重置</button>
       </div>
     </header>
@@ -89,81 +89,111 @@
     </section>
 
     <section id="page-adventure" class="page">
-      <section class="card adventure-head">
-        <div class="section-title">
-          <span>歷練</span>
-          <strong id="energyText">體力 5 / 5</strong>
+      <section class="compact-head">
+        <div>
+          <strong>歷練</strong>
+          <small id="energyText">體力 5 / 5</small>
         </div>
-        <p class="muted">每區累積 4 場勝利後出現 Boss；可單次或連續歷練。裝備具有品質與隨機詞條。</p>
+        <div class="pager">
+          <button id="zonePrevBtn" class="mini-btn" type="button">‹</button>
+          <span id="zonePageText">1/2</span>
+          <button id="zoneNextBtn" class="mini-btn" type="button">›</button>
+        </div>
       </section>
 
-      <section class="card battle-card battle-card-top">
-        <div class="section-title">
+      <section class="battle-strip">
+        <div class="battle-strip-head">
           <span>戰鬥紀錄</span>
           <strong id="battleResult">尚未出戰</strong>
         </div>
-        <div id="battleLog" class="battle-log">選擇一處地點開始歷練。</div>
+        <div id="battleLog" class="battle-log-compact">選擇一處地點開始歷練。</div>
       </section>
 
-      <section id="zoneList" class="zone-list"></section>
+      <section id="zoneList" class="zone-grid-fixed"></section>
     </section>
 
     <section id="page-cave" class="page">
-      <section class="card inventory-card">
-        <div class="section-title"><span>儲物袋</span><strong id="bagCount">0 種物品</strong></div>
-        <div id="inventoryList" class="inventory-list"></div>
+      <div class="subtabs cave-tabs">
+        <button class="subtab active" data-cave-tab="inventory" type="button">背包</button>
+        <button class="subtab" data-cave-tab="alchemy" type="button">煉丹</button>
+        <button class="subtab" data-cave-tab="equipment" type="button">裝備</button>
+        <button class="subtab" data-cave-tab="skills" type="button">功法</button>
+      </div>
+
+      <section id="cave-inventory" class="cave-panel active">
+        <div class="compact-head">
+          <div><strong>儲物袋</strong><small id="bagCount">0 種物品</small></div>
+          <div class="pager">
+            <button id="bagPrevBtn" class="mini-btn" type="button">‹</button>
+            <span id="bagPageText">1/1</span>
+            <button id="bagNextBtn" class="mini-btn" type="button">›</button>
+          </div>
+        </div>
+        <div id="inventoryList" class="fixed-grid six-grid"></div>
       </section>
 
-
-      <section class="card alchemy-card">
-        <div class="section-title"><span>煉丹</span><strong id="alchemyText">已煉 0 次</strong></div>
-        <p class="muted compact-help">材料足夠即可煉製；丹藥可使用或輔助突破。</p>
-        <details class="dev-box">
-          <summary>煉丹測試</summary>
-          <button id="testAlchemyBtn" class="secondary-btn" type="button">領取煉丹測試材料</button>
-        </details>
-        <div id="alchemyList" class="alchemy-list"></div>
+      <section id="cave-alchemy" class="cave-panel">
+        <div class="compact-head">
+          <div><strong>煉丹</strong><small id="alchemyText">已煉 0 次</small></div>
+          <details class="dev-inline">
+            <summary>測試</summary>
+            <button id="testAlchemyBtn" class="mini-btn" type="button">領材料</button>
+          </details>
+        </div>
+        <div id="alchemyList" class="fixed-grid alchemy-grid"></div>
       </section>
 
-      <section class="card equipment-card">
-        <div class="section-title"><span>裝備</span><strong id="powerText">戰力 0</strong></div>
-        <p class="muted">品質：凡品 → 良品 → 上品 → 極品 → 靈器；品質越高，詞條與能力越強。</p>
-        <details class="dev-box">
-          <summary>開發測試</summary>
-          <button id="testGearBtn" class="secondary-btn" type="button">領取 V0.5 測試裝備</button>
-        </details>
-        <div id="equipmentSlots" class="equipment-slots"></div>
-        <div id="equipmentBag" class="equipment-bag"></div>
+      <section id="cave-equipment" class="cave-panel">
+        <div class="compact-head">
+          <div><strong>裝備</strong><small id="powerText">戰力 0</small></div>
+          <details class="dev-inline">
+            <summary>測試</summary>
+            <button id="testGearBtn" class="mini-btn" type="button">領裝備</button>
+          </details>
+        </div>
+        <div id="equipmentSlots" class="equipment-slots compact-slots"></div>
+        <div class="pager equipment-pager">
+          <button id="equipPrevBtn" class="mini-btn" type="button">‹</button>
+          <span id="equipPageText">1/1</span>
+          <button id="equipNextBtn" class="mini-btn" type="button">›</button>
+        </div>
+        <div id="equipmentBag" class="fixed-grid equip-grid"></div>
       </section>
 
-      <section class="card skill-card">
-        <div class="section-title"><span>功法</span><strong id="skillCountText">0 / 3</strong></div>
-        <p class="muted">功法可提升至五重；升級需要靈石，並會提高戰力與修煉效率。最多裝備 3 本。</p>
-        <div id="skillList" class="skill-list"></div>
+      <section id="cave-skills" class="cave-panel">
+        <div class="compact-head">
+          <div><strong>功法</strong><small id="skillCountText">0 / 3</small></div>
+          <div></div>
+        </div>
+        <div id="skillList" class="fixed-grid skill-grid"></div>
       </section>
     </section>
 
     <section id="page-character" class="page">
-      <section class="card placeholder character-card">
-        <div class="character-title-row">
-          <h2>角色</h2>
-          <span class="tag">散修</span>
-        </div>
-        <div class="rename-box">
-          <label for="playerNameInput">角色名稱</label>
-          <div class="rename-row">
-            <input id="playerNameInput" maxlength="12" autocomplete="off" />
-            <button id="renameBtn" class="secondary-btn" type="button">修改</button>
+      <section class="character-fixed">
+        <div class="character-header">
+          <div>
+            <strong id="charDisplayName">李柏儒</strong>
+            <span class="tag">散修</span>
           </div>
-          <small>1～12 個字；修改後自動保存。</small>
+          <button id="openRenameBtn" class="mini-btn" type="button">改名</button>
         </div>
-        <div class="character-grid">
+
+        <div id="renamePanel" class="rename-compact hidden">
+          <input id="playerNameInput" maxlength="12" autocomplete="off" />
+          <button id="renameBtn" class="mini-btn" type="button">確定</button>
+          <button id="cancelRenameBtn" class="mini-btn" type="button">取消</button>
+        </div>
+
+        <div class="character-grid-fixed">
           <div><span>境界</span><strong id="charRealm">煉氣一層</strong></div>
           <div><span>道心</span><strong id="charDao">0</strong></div>
           <div><span>戰力</span><strong id="charPower">0</strong></div>
           <div><span>擊敗妖獸</span><strong id="charKills">0</strong></div>
           <div><span>觸發機緣</span><strong id="charEvents">0</strong></div>
-          <div><span>突破成功</span><strong id="charBreaks">0</strong></div><div><span>Boss 擊破</span><strong id="charBoss">0</strong></div><div><span>煉丹次數</span><strong id="charAlchemy">0</strong></div>
+          <div><span>突破成功</span><strong id="charBreaks">0</strong></div>
+          <div><span>Boss 擊破</span><strong id="charBoss">0</strong></div>
+          <div><span>煉丹次數</span><strong id="charAlchemy">0</strong></div>
         </div>
       </section>
     </section>

@@ -93,6 +93,7 @@ function defaultSave(){
 }
 
 let state=null,db=null;
+let ui={zonePage:0,bagPage:0,equipPage:0,caveTab:"inventory"};
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.floor(n).toLocaleString("zh-TW");
 function escapeHTML(str){return String(str).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
@@ -270,14 +271,16 @@ function useInventoryItem(name){
 function renderInventory(){
   const entries=Object.entries(state.inventory).filter(([,n])=>n>0);
   $("bagCount").textContent=`${entries.length} 種物品`;
-  $("inventoryList").innerHTML=entries.length?entries.map(([name,count])=>{
-    let desc="修仙途中取得的材料或道具。";
-    if(name==="築基丹")desc="突破時可增加 20% 成功率。";
-    if(name==="聚氣丹")desc="立即增加 500 修為。";
-    if(name==="小還丹")desc="立即治癒內傷。";
+  const perPage=6,pageCount=Math.max(1,Math.ceil(entries.length/perPage));
+  ui.bagPage=Math.max(0,Math.min(ui.bagPage,pageCount-1));
+  const visible=entries.slice(ui.bagPage*perPage,ui.bagPage*perPage+perPage);
+  $("bagPageText").textContent=`${ui.bagPage+1}/${pageCount}`;
+  $("bagPrevBtn").disabled=ui.bagPage<=0;$("bagNextBtn").disabled=ui.bagPage>=pageCount-1;
+  $("inventoryList").innerHTML=visible.length?visible.map(([name,count])=>{
+    let desc="材料或道具";if(name==="築基丹")desc="突破 +20%";if(name==="聚氣丹")desc="修為 +500";if(name==="小還丹")desc="治癒內傷";
     const usable=name==="聚氣丹"||name==="小還丹";
     return `<div class="item-row"><div class="row-copy"><b>${escapeHTML(name)}</b><small>${desc}</small></div><div class="item-actions"><strong>×${count}</strong>${usable?`<button class="item-use-btn" data-use-item="${name}" type="button">使用</button>`:""}</div></div>`;
-  }).join(""):`<div class="empty">儲物袋目前是空的。</div>`;
+  }).join(""):`<div class="empty">空</div>`;
   document.querySelectorAll(".item-use-btn").forEach(b=>b.addEventListener("click",async()=>{useInventoryItem(b.dataset.useItem);render();await writeSave()}));
 }
 function renderAlchemy(){
@@ -292,29 +295,43 @@ function renderEquipment(){
   const labels={weapon:"武器",armor:"法衣",accessory:"飾品"};
   $("equipmentSlots").innerHTML=Object.entries(labels).map(([slot,label])=>{
     const name=state.equipped[slot],meta=name?state.equipmentMeta[name]:null,q=meta?qualityOf(meta.quality):null;
-    return `<div class="slot"><span>${label}</span><strong class="${q?q.className:""}">${name?`【${q.name}】${name}`:"未裝備"}</strong></div>`;
+    return `<div class="slot"><span>${label}</span><strong class="${q?q.className:""}">${name?name:"未裝備"}</strong></div>`;
   }).join("");
-  $("equipmentBag").innerHTML=state.equipmentInventory.length?state.equipmentInventory.map(name=>{
+  const items=state.equipmentInventory;
+  const perPage=4,pageCount=Math.max(1,Math.ceil(items.length/perPage));
+  ui.equipPage=Math.max(0,Math.min(ui.equipPage,pageCount-1));
+  const visible=items.slice(ui.equipPage*perPage,ui.equipPage*perPage+perPage);
+  $("equipPageText").textContent=`${ui.equipPage+1}/${pageCount}`;
+  $("equipPrevBtn").disabled=ui.equipPage<=0;$("equipNextBtn").disabled=ui.equipPage>=pageCount-1;
+  $("equipmentBag").innerHTML=visible.length?visible.map(name=>{
     const d=equipmentDefs[name],m=state.equipmentMeta[name]||makeEquipmentMeta(name,0),q=qualityOf(m.quality),s=equipmentStats(name),equipped=Object.values(state.equipped).includes(name);
-    const chips=[`戰力 +${s.power}`,`修煉 +${Math.round(s.rate*100)}%`,...(m.affixes||[]).map(affixText)];
-    return `<div class="equip-row"><div class="row-copy"><b class="${q.className}">【${q.name}】${name}</b><small>${d.desc}</small><div class="gear-meta">${chips.map(x=>`<span class="gear-chip">${x}</span>`).join("")}</div></div><button class="equip-btn" data-equip="${name}" type="button">${equipped?"已裝備":"裝備"}</button></div>`;
-  }).join(""):`<div class="empty">尚未取得裝備，前往歷練有機會掉落。</div>`;
+    return `<div class="equip-row"><div class="row-copy"><b class="${q.className}">【${q.name}】${name}</b><small>戰力+${s.power} · 修煉+${Math.round(s.rate*100)}%</small></div><button class="equip-btn" data-equip="${name}" type="button">${equipped?"已裝":"裝備"}</button></div>`;
+  }).join(""):`<div class="empty">尚無裝備</div>`;
   document.querySelectorAll(".equip-btn").forEach(b=>b.addEventListener("click",async()=>{equipItem(b.dataset.equip);render();await writeSave()}));
 }
 function renderSkills(){
   $("skillCountText").textContent=`${state.equippedSkills.length} / 3`;
-  $("skillList").innerHTML=state.learnedSkills.map(name=>{
+  const visible=state.learnedSkills.slice(0,4);
+  $("skillList").innerHTML=visible.map(name=>{
     const d=skillDefs[name],on=state.equippedSkills.includes(name),lv=state.skillLevels[name]||1,mult=1+(lv-1)*.20,cost=skillUpgradeCost(name),max=lv>=5;
-    return `<div class="skill-row"><div class="row-copy"><b>《${name}》</b><span class="skill-level">第 ${lv} 重</span><small>${d.desc}｜戰力 +${Math.round(d.power*mult)}｜修煉 +${Math.round(d.rate*mult*100)}%</small></div><div class="skill-actions"><button class="skill-btn" data-skill="${name}" type="button">${on?"卸下":"裝備"}</button><button class="skill-upgrade-btn" data-upgrade-skill="${name}" type="button" ${max||state.spiritStone<cost?"disabled":""}>${max?"已滿重":`升級 ${cost} 靈石`}</button></div></div>`;
+    return `<div class="skill-row"><div class="row-copy"><b>《${name}》</b><small>第${lv}重 · 戰力+${Math.round(d.power*mult)} · 修煉+${Math.round(d.rate*mult*100)}%</small></div><div class="skill-actions"><button class="skill-btn" data-skill="${name}" type="button">${on?"卸下":"裝備"}</button><button class="skill-upgrade-btn" data-upgrade-skill="${name}" type="button" ${max||state.spiritStone<cost?"disabled":""}>${max?"滿":"升級"}</button></div></div>`;
   }).join("");
   document.querySelectorAll(".skill-btn").forEach(b=>b.addEventListener("click",async()=>{equipSkill(b.dataset.skill);render();await writeSave()}));
   document.querySelectorAll(".skill-upgrade-btn").forEach(b=>b.addEventListener("click",async()=>{upgradeSkill(b.dataset.upgradeSkill);render();await writeSave()}));
 }
 function renderZones(){
-  restoreEnergy();$("energyText").textContent=`體力 ${state.energy} / 5`;
-  $("zoneList").innerHTML=zones.map(z=>{
+  restoreEnergy();
+  $("energyText").textContent=`體力 ${state.energy} / 5`;
+  const perPage=4;
+  const pageCount=Math.max(1,Math.ceil(zones.length/perPage));
+  ui.zonePage=Math.max(0,Math.min(ui.zonePage,pageCount-1));
+  const visible=zones.slice(ui.zonePage*perPage,ui.zonePage*perPage+perPage);
+  $("zonePageText").textContent=`${ui.zonePage+1}/${pageCount}`;
+  $("zonePrevBtn").disabled=ui.zonePage<=0;
+  $("zoneNextBtn").disabled=ui.zonePage>=pageCount-1;
+  $("zoneList").innerHTML=visible.map(z=>{
     const locked=state.realmIndex<z.minRealm,wins=state.zoneWins[z.id]||0,boss=!!state.bossReady[z.id],can1=!locked&&state.energy>=z.energy,can3=!locked&&state.energy>=z.energy*3;
-    return `<section class="card zone-card"><div class="zone-top"><div><h3>${z.name}</h3><p>${z.desc}</p></div><div class="zone-level">${locked?`需 ${realms[z.minRealm].name}`:`勝場 ${wins}/4`}</div></div>${boss?`<div class="boss-line">Boss 已出現：${z.boss}</div>`:""}<div class="zone-actions"><button class="zone-btn" data-zone="${z.id}" data-runs="1" type="button" ${can1?"":"disabled"}>${locked?"境界不足":"歷練 ×1"}</button><button class="zone-btn" data-zone="${z.id}" data-runs="3" type="button" ${can3?"":"disabled"}>連續 ×3</button></div>${boss?`<button class="zone-btn boss-btn" data-boss="${z.id}" type="button" ${can1?"":"disabled"}>挑戰 Boss</button>`:""}</section>`;
+    return `<section class="zone-card card"><h3>${z.name}</h3><p>${z.desc}</p><div class="zone-level">${locked?`需 ${realms[z.minRealm].name}`:`勝場 ${wins}/4 · 體力 ${z.energy}`}</div>${boss?`<div class="boss-line">Boss：${z.boss}</div>`:""}<div class="zone-actions"><button class="zone-btn" data-zone="${z.id}" data-runs="1" type="button" ${can1?"":"disabled"}>×1</button><button class="zone-btn" data-zone="${z.id}" data-runs="3" type="button" ${can3?"":"disabled"}>×3</button></div>${boss?`<button class="zone-btn boss-btn" data-boss="${z.id}" type="button" ${can1?"":"disabled"}>Boss</button>`:""}</section>`;
   }).join("");
   document.querySelectorAll(".zone-btn[data-zone]").forEach(b=>b.addEventListener("click",()=>runAdventureBatch(b.dataset.zone,Number(b.dataset.runs))));
   document.querySelectorAll(".boss-btn").forEach(b=>b.addEventListener("click",()=>runBoss(b.dataset.boss)));
@@ -322,7 +339,7 @@ function renderZones(){
 
 function render(){
   restoreEnergy();const r=realm(),chance=breakthroughChance();
-  $("playerName").textContent=state.playerName;$("realmText").textContent=r.name;$("rateText").textContent=`+${currentRate().toFixed(1)} / 秒`;if(document.activeElement!==$("playerNameInput"))$("playerNameInput").value=state.playerName;$("progressLabel").textContent=`${fmt(state.cultivation)} / ${fmt(r.need)}`;$("progressBar").style.width=`${Math.min(100,state.cultivation/r.need*100)}%`;
+  $("playerName").textContent=state.playerName;$("realmText").textContent=r.name;$("rateText").textContent=`+${currentRate().toFixed(1)} / 秒`;if($("renamePanel").classList.contains("hidden"))$("playerNameInput").value=state.playerName;$("progressLabel").textContent=`${fmt(state.cultivation)} / ${fmt(r.need)}`;$("progressBar").style.width=`${Math.min(100,state.cultivation/r.need*100)}%`;
   $("breakthroughRate").textContent=state.realmIndex>=realms.length-1?"已達版本上限":`${Math.round(chance*100)}%`;$("baseRate").textContent=state.realmIndex>=realms.length-1?"--":`${Math.round(r.breakthrough*100)}%`;$("daoBonus").textContent=`+${Math.min(20,state.daoHeart)}%`;$("pillBonus").textContent=`+${Math.round(state.activePillBonus*100)}%`;
   $("pillCountText").textContent=`×${state.inventory["築基丹"]||0}`;$("usePillBtn").disabled=!!state.activePillBonus||!(state.inventory["築基丹"]||0);$("injuryNotice").classList.toggle("hidden",!isInjured());
   const canBreak=state.cultivation>=r.need&&state.realmIndex<realms.length-1;$("breakthroughBtn").disabled=!canBreak;$("breakthroughBtn").textContent=state.realmIndex>=realms.length-1?"已達目前最高境界":(canBreak?"嘗試突破":"修為未滿");
@@ -332,7 +349,7 @@ function render(){
   $("mCultivation").textContent=fmt(state.cultivation);
   $("mStone").textContent=fmt(state.spiritStone);
   $("mPower").textContent=Math.round(totalPower());
-  $("powerText").textContent=`戰力 ${Math.round(totalPower())}`;$("charRealm").textContent=r.name;$("charDao").textContent=fmt(state.daoHeart);$("charPower").textContent=Math.round(totalPower());$("charKills").textContent=fmt(state.stats.kills);$("charEvents").textContent=fmt(state.stats.events);$("charBreaks").textContent=fmt(state.stats.breakthroughs||0);$("charBoss").textContent=fmt(state.stats.bossKills||0);$("charAlchemy").textContent=fmt(state.stats.alchemy||0);
+  $("powerText").textContent=`戰力 ${Math.round(totalPower())}`;$("charDisplayName").textContent=state.playerName;$("charRealm").textContent=r.name;$("charDao").textContent=fmt(state.daoHeart);$("charPower").textContent=Math.round(totalPower());$("charKills").textContent=fmt(state.stats.kills);$("charEvents").textContent=fmt(state.stats.events);$("charBreaks").textContent=fmt(state.stats.breakthroughs||0);$("charBoss").textContent=fmt(state.stats.bossKills||0);$("charAlchemy").textContent=fmt(state.stats.alchemy||0);
   renderZones();renderInventory();renderAlchemy();renderEquipment();renderSkills();
 }
 
@@ -407,12 +424,12 @@ $("breakthroughBtn").addEventListener("click",async()=>{
 });
 $("usePillBtn").addEventListener("click",async()=>{if(state.activePillBonus||!removeItem("築基丹",1))return;state.activePillBonus=.20;addLog("服用築基丹，本次突破成功率 +20%。");render();await writeSave()});
 document.querySelectorAll(".mode-btn").forEach(b=>b.addEventListener("click",async()=>{state.mode=b.dataset.mode;addLog(state.mode==="wander"?"你離開洞府，前往山野歷練。":"你盤膝而坐，開始吐納天地靈氣。");render();await writeSave()}));
-document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>{const page=b.dataset.page;document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===`page-${page}`));window.scrollTo({top:0,behavior:"smooth"})}));
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>{const page=b.dataset.page;document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===`page-${page}`))}));
 $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await writeSave()});
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V0.8.3 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V0.9 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
@@ -431,11 +448,34 @@ $("renameBtn").addEventListener("click",async()=>{
   if(!name){alert("角色名稱不能空白。");$("playerNameInput").value=state.playerName;return}
   if([...name].length>12){alert("角色名稱最多 12 個字。");return}
   state.playerName=name;
+  $("renamePanel").classList.add("hidden");
   addLog(`道號已改為「${name}」。`);
   render();
   await writeSave();
 });
 $("playerNameInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("renameBtn").click()});
+
+
+$("zonePrevBtn").addEventListener("click",()=>{ui.zonePage=Math.max(0,ui.zonePage-1);renderZones()});
+$("zoneNextBtn").addEventListener("click",()=>{ui.zonePage+=1;renderZones()});
+$("bagPrevBtn").addEventListener("click",()=>{ui.bagPage=Math.max(0,ui.bagPage-1);renderInventory()});
+$("bagNextBtn").addEventListener("click",()=>{ui.bagPage+=1;renderInventory()});
+$("equipPrevBtn").addEventListener("click",()=>{ui.equipPage=Math.max(0,ui.equipPage-1);renderEquipment()});
+$("equipNextBtn").addEventListener("click",()=>{ui.equipPage+=1;renderEquipment()});
+document.querySelectorAll("[data-cave-tab]").forEach(btn=>btn.addEventListener("click",()=>{
+  ui.caveTab=btn.dataset.caveTab;
+  document.querySelectorAll("[data-cave-tab]").forEach(x=>x.classList.toggle("active",x===btn));
+  document.querySelectorAll(".cave-panel").forEach(x=>x.classList.toggle("active",x.id===`cave-${ui.caveTab}`));
+}));
+$("openRenameBtn").addEventListener("click",()=>{
+  $("playerNameInput").value=state.playerName;
+  $("renamePanel").classList.remove("hidden");
+  $("playerNameInput").focus();
+});
+$("cancelRenameBtn").addEventListener("click",()=>{
+  $("playerNameInput").value=state.playerName;
+  $("renamePanel").classList.add("hidden");
+});
 
 $("resetBtn").addEventListener("click",async()=>{if(!confirm("確定重置所有進度？此動作無法復原。"))return;state=defaultSave();render();await writeSave()});
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"&&state)await writeSave()});
