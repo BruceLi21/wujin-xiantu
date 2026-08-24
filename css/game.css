@@ -526,3 +526,68 @@ html,body,#app,.game-shell{
   .mobile-status span{display:none!important}
   .bottom-nav .nav-btn{min-height:42px!important}
 }
+
+/* V0.8.3 修正：單屏 = 頁面切換，不是裁切內容 */
+html,body,#app,.game-shell{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
+.game-shell{display:grid!important;grid-template-rows:auto auto minmax(0,1fr) auto!important}
+.page{
+  display:none!important;
+  height:100%!important;min-height:0!important;max-height:none!important;
+  overflow:hidden!important;padding:0 8px 5px!important;
+}
+.page.active{display:block!important}
+
+/* 每頁內容必須在自己的可視區內，禁止用 overflow 把文字切掉 */
+#page-cultivation,#page-adventure,#page-cave,#page-character{
+  overflow:hidden!important;
+  position:relative!important;
+}
+
+/* 修煉 */
+#page-cultivation .progress-card,#page-cultivation .cultivation-card{padding:6px!important;margin:3px 0!important}
+#page-cultivation .breakthrough-details{margin:3px 0!important}
+#page-cultivation .mode-btn{min-height:38px!important}
+
+/* 歷練：保留真正可點擊的區域，卡片縮小而非遮掉 */
+#page-adventure .card{padding:6px!important;margin:3px 0!important}
+#page-adventure .adventure-grid,
+#page-adventure .location-grid,
+#page-adventure .stage-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+#page-adventure button{pointer-events:auto!important;min-height:32px!important;padding:4px!important;font-size:10px!important}
+#page-adventure .log-card{max-height:80px!important;overflow:hidden!important}
+
+/* 洞府：恢復正常 block 流，避免之前 grid 規則破壞按鈕 */
+#page-cave{display:none!important}
+#page-cave.active{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:min-content!important;align-content:start!important;gap:4px!important}
+#page-cave>.card{display:block!important;padding:6px!important;margin:0!important;min-width:0!important;overflow:visible!important}
+#page-cave button{pointer-events:auto!important;min-height:32px!important;padding:4px!important;font-size:10px!important}
+
+/* 角色：完整顯示，不再只剩上半部 */
+#page-character{display:none!important}
+#page-character.active{display:grid!important;grid-template-rows:auto minmax(0,1fr)!important;gap:4px!important}
+#page-character>.card{padding:6px!important;margin:0!important;overflow:hidden!important}
+#page-character .rename-box{padding:5px!important;margin:3px 0 5px!important}
+#page-character .character-grid{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important
+}
+#page-character .character-grid>div{padding:4px!important;font-size:9px!important}
+#page-character .character-grid strong{font-size:12px!important}
+#page-character .equipment-grid,#page-character .inventory-grid{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:3px!important
+}
+#page-character .equipment-grid>*,#page-character .inventory-grid>*{padding:4px!important;font-size:8px!important}
+
+/* 字不能被裁切：允許卡片文字正常換行 */
+.card,.card *{text-overflow:clip}
+.card p,.card small,.card .muted{white-space:normal!important;overflow:visible!important}
+
+/* 導航永遠在最上層且可操作 */
+.bottom-nav{z-index:100!important;position:relative!important}
+.bottom-nav .nav-btn{pointer-events:auto!important;position:relative!important;z-index:101!important}
+
+@media(max-height:760px){
+ .topbar{padding-top:5px!important}
+ .topbar h1{font-size:19px!important}
+ .mobile-status{margin-bottom:2px!important}
+ #page-character .character-grid>div{padding:3px!important}
+}
