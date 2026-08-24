@@ -318,7 +318,7 @@ function renderSkills(){
 }
 function renderZones(){
   restoreEnergy();
-  $("energyText").textContent="體力 ∞";
+  $("energyText").textContent="自由歷練";
   const perPage=2;
   const pageCount=Math.max(1,Math.ceil(zones.length/perPage));
   ui.zonePage=Math.max(0,Math.min(ui.zonePage,pageCount-1));
@@ -328,7 +328,7 @@ function renderZones(){
   $("zoneNextBtn").disabled=ui.zonePage>=pageCount-1;
   $("zoneList").innerHTML=visible.map(z=>{
     const locked=state.realmIndex<z.minRealm,wins=state.zoneWins[z.id]||0,boss=!!state.bossReady[z.id];
-    return `<section class="zone-card card"><h3>${z.name}</h3><p>${z.desc}</p><div class="zone-level">${locked?`需 ${realms[z.minRealm].name}`:`勝場 ${wins}/4 · 體力 ∞`}</div>${boss?`<div class="boss-line">Boss：${z.boss}</div>`:""}<div class="zone-actions"><button class="zone-btn" data-zone="${z.id}" data-runs="1" type="button" ${locked?"disabled":""}>×1</button><button class="zone-btn" data-zone="${z.id}" data-runs="3" type="button" ${locked?"disabled":""}>×3</button></div>${boss?`<button class="zone-btn boss-btn" data-boss="${z.id}" type="button" ${locked?"disabled":""}>Boss</button>`:""}</section>`;
+    return `<section class="zone-card card"><h3>${z.name}</h3><p>${z.desc}</p><div class="zone-level">${locked?`需 ${realms[z.minRealm].name}`:""}</div>${boss?`<div class="boss-line">Boss：${z.boss}</div>`:""}<div class="zone-actions"><button class="zone-btn" data-zone="${z.id}" data-runs="1" type="button" ${locked?"disabled":""}>×1</button><button class="zone-btn" data-zone="${z.id}" data-runs="3" type="button" ${locked?"disabled":""}>×3</button></div>${boss?`<button class="zone-btn boss-btn" data-boss="${z.id}" type="button" ${locked?"disabled":""}>Boss</button>`:""}</section>`;
   }).join("");
   document.querySelectorAll(".zone-btn[data-zone]").forEach(b=>b.addEventListener("click",()=>runAdventureBatch(b.dataset.zone,Number(b.dataset.runs))));
   document.querySelectorAll(".boss-btn").forEach(b=>b.addEventListener("click",()=>runBoss(b.dataset.boss)));
@@ -411,20 +411,56 @@ async function animateBattle(z,boss=false){
   let php=p.hp,ehp=e.hp,round=0;
   const host=$("battleLog");
   $("battleResult").textContent=boss?"Boss 戰鬥中":"戰鬥中";
-  host.innerHTML=`<div class="v13-battle">
-    <div class="v13-battle-row v13-enemy"><div class="v13-battle-head"><span>${monster}</span><span class="e-num">${ehp}/${e.hp}</span></div><div class="v13-hp"><i class="e-bar"></i></div></div>
-    <div class="v13-battle-row v13-player"><div class="v13-battle-head"><span>${state.playerName}</span><span class="p-num">${php}/${p.hp}</span></div><div class="v13-hp"><i class="p-bar"></i></div></div>
-    <div class="v13-turns"></div></div>`;
-  const log=host.querySelector(".v13-turns"),eb=host.querySelector(".e-bar"),pb=host.querySelector(".p-bar"),en=host.querySelector(".e-num"),pn=host.querySelector(".p-num");
-  const add=t=>{log.innerHTML=`<div>${t}</div>`+log.innerHTML};
+  host.innerHTML=`<div class="v14-battle">
+    <div class="v14-row v14-enemy">
+      <div class="v14-head"><span>${monster}</span><span class="e-num">${ehp}/${e.hp}</span></div>
+      <div class="v14-stats">攻擊 ${e.atk}　防禦 ${e.def}</div>
+      <div class="v14-hp"><i class="e-bar"></i></div>
+    </div>
+    <div class="v14-row v14-player">
+      <div class="v14-head"><span>${state.playerName}</span><span class="p-num">${php}/${p.hp}</span></div>
+      <div class="v14-stats">攻擊 ${p.atk}　防禦 ${p.def}</div>
+      <div class="v14-hp"><i class="p-bar"></i></div>
+    </div>
+    <div class="v14-action">
+      <div class="main">準備交戰…</div>
+      <div class="sub">雙方進入戰鬥狀態</div>
+    </div>
+  </div>`;
+  const action=host.querySelector(".v14-action");
+  const main=action.querySelector(".main"),sub=action.querySelector(".sub");
+  const eb=host.querySelector(".e-bar"),pb=host.querySelector(".p-bar"),en=host.querySelector(".e-num"),pn=host.querySelector(".p-num");
+
   while(php>0&&ehp>0&&round<40){
     round++;
-    const dealt=Math.max(1,Math.round(p.atk*(.88+Math.random()*.24)-e.def*(.82+Math.random()*.18)));
-    ehp=Math.max(0,ehp-dealt);add(`第 ${round} 回合：你攻擊 ${monster}，造成 ${dealt} 傷害。`);eb.style.width=`${ehp/e.hp*100}%`;en.textContent=`${ehp}/${e.hp}`;await sleep(650);
+    const rawP=Math.round(p.atk*(.88+Math.random()*.24));
+    const reducedP=Math.round(e.def*(.82+Math.random()*.18));
+    const dealt=Math.max(1,rawP-reducedP);
+    ehp=Math.max(0,ehp-dealt);
+    main.innerHTML=`<span class="round">第 ${round} 回合</span>　你出手攻擊 <b>${monster}</b>`;
+    sub.innerHTML=`攻擊 ${rawP} − 對方防禦 ${reducedP} = <span class="dmg">${dealt} 傷害</span>`;
+    eb.style.width=`${ehp/e.hp*100}%`;en.textContent=`${ehp}/${e.hp}`;
+    await sleep(850);
     if(ehp<=0)break;
-    const taken=Math.max(1,Math.round(e.atk*(.88+Math.random()*.24)-p.def*(.82+Math.random()*.18)));
-    php=Math.max(0,php-taken);add(`${monster} 反擊，你受到 ${taken} 傷害。`);pb.style.width=`${php/p.hp*100}%`;pn.textContent=`${php}/${p.hp}`;await sleep(650);
+
+    const rawE=Math.round(e.atk*(.88+Math.random()*.24));
+    const reducedE=Math.round(p.def*(.82+Math.random()*.18));
+    const taken=Math.max(1,rawE-reducedE);
+    php=Math.max(0,php-taken);
+    main.innerHTML=`<b>${monster}</b> 反擊`;
+    sub.innerHTML=`敵攻 ${rawE} − 你的防禦 ${reducedE} = <span class="hurt">${taken} 傷害</span>`;
+    pb.style.width=`${php/p.hp*100}%`;pn.textContent=`${php}/${p.hp}`;
+    await sleep(850);
   }
+
+  if(ehp<=0){
+    main.innerHTML=`<b>${monster}</b> 已被擊敗`;
+    sub.innerHTML=`你剩餘 ${php}/${p.hp} HP`;
+  }else{
+    main.innerHTML=`你戰敗了`;
+    sub.innerHTML=`${monster} 剩餘 ${ehp}/${e.hp} HP`;
+  }
+  await sleep(650);
   return {win:ehp<=0,monster};
 }
 function triggerEvent(){
@@ -466,7 +502,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V13 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V14 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
@@ -517,12 +553,12 @@ $("cancelRenameBtn").addEventListener("click",()=>{
 $("resetBtn").addEventListener("click",async()=>{if(!confirm("確定重置所有進度？此動作無法復原。"))return;state=defaultSave();render();await writeSave()});
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"&&state)await writeSave()});
 if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./service-worker.js?v=13",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn);
+  navigator.serviceWorker.register("./service-worker.js?v=14",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn);
 }
 bootstrap().catch(err=>{console.error(err);alert("遊戲初始化失敗，請重新整理頁面。")});
 
-/* ===== V13 battle presentation layer ===== */
-window.V13Battle = window.V13Battle || {
+/* ===== V14 battle presentation layer ===== */
+window.V14Battle = window.V14Battle || {
   running:false,
   async play(opts){
     if(this.running) return;
