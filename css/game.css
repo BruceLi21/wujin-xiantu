@@ -1291,3 +1291,139 @@ button, input, select, textarea {
   .zone-grid-fixed{height:calc(100% - 240px)!important}
   #page-adventure .zone-btn{min-height:54px!important}
 }
+
+/* ===== V15 字級統一 + 境界完整顯示 + 歷練次數修正 ===== */
+
+/* 全域字級階層：避免同一頁忽大忽小 */
+:root{
+  --fs-caption:16px;
+  --fs-body:18px;
+  --fs-body-strong:20px;
+  --fs-section:24px;
+  --fs-title:34px;
+}
+body,button,input,select,textarea{font-size:var(--fs-body)!important}
+.topbar .eyebrow{font-size:var(--fs-caption)!important}
+.topbar h1{font-size:var(--fs-title)!important}
+.version,.ghost-btn,.subtab,.mini-btn,.zone-btn,.boss-btn{font-size:var(--fs-body)!important}
+
+.mobile-status span,
+.character-grid-fixed span,
+.small-grid span,
+.zone-level,
+.v14-stats{font-size:var(--fs-caption)!important}
+
+.mobile-status strong,
+.character-grid-fixed strong,
+.small-grid strong,
+.row-copy b,
+.recipe-copy b,
+.fixed-grid b,
+.zone-card h3,
+.mode-btn strong{font-size:var(--fs-body-strong)!important}
+
+.section-title>span,
+.compact-head strong,
+.character-header strong{font-size:var(--fs-section)!important}
+
+.muted,.compact-help,.home-tip,.row-copy small,.recipe-copy small,
+.fixed-grid small,.zone-card p,.battle-log-compact,.v14-action .sub{
+  font-size:var(--fs-body)!important;
+  line-height:1.45!important;
+}
+
+/* 境界格完整顯示：不省略、不出現「築基中…」 */
+.mobile-status>div:first-child{
+  min-width:0!important;
+  overflow:visible!important;
+}
+.mobile-status>div:first-child strong,
+#mRealm{
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:keep-all!important;
+  line-height:1.15!important;
+  min-height:46px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:20px!important;
+}
+
+/* 四格狀態高度統一，給境界兩行空間 */
+.mobile-status>div{
+  min-height:76px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+}
+
+/* 歷練：每頁固定 2 個副本，按鈕固定顯示在卡片底部 */
+.zone-grid-fixed{
+  grid-template-columns:1fr!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+#page-adventure .zone-card{
+  position:relative!important;
+  display:grid!important;
+  grid-template-rows:auto auto 1fr auto!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+#page-adventure .zone-card p{
+  min-height:0!important;
+  height:auto!important;
+  margin-bottom:6px!important;
+}
+#page-adventure .zone-actions{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+  margin-top:8px!important;
+  align-self:end!important;
+}
+#page-adventure .zone-btn{
+  min-height:56px!important;
+  font-size:20px!important;
+  font-weight:800!important;
+}
+#page-adventure .zone-btn[data-runs="1"]::after{
+  content:" 挑戰 1 次";
+}
+#page-adventure .zone-btn[data-runs="3"]::after{
+  content:" 連戰 3 次";
+}
+/* 隱藏原本 ×1 / ×3 文字，改由 ::after 顯示完整文字 */
+#page-adventure .zone-btn[data-runs="1"],
+#page-adventure .zone-btn[data-runs="3"]{
+  color:transparent!important;
+  position:relative!important;
+}
+#page-adventure .zone-btn[data-runs="1"]::after,
+#page-adventure .zone-btn[data-runs="3"]::after{
+  color:#ead7a0!important;
+  position:absolute!important;
+  inset:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:20px!important;
+  font-weight:800!important;
+}
+
+/* 戰鬥資訊字級也統一 */
+.v14-battle-head{font-size:20px!important}
+.v14-action .main{font-size:20px!important}
+.v14-action .sub{font-size:18px!important}
+
+/* 底部導航統一 */
+.bottom-nav .nav-btn{font-size:18px!important}
+.bottom-nav .nav-btn span{font-size:26px!important}
+
+/* 小螢幕只縮間距，不縮字 */
+@media(max-height:760px){
+  .mobile-status>div{min-height:72px!important}
+  #page-adventure .zone-btn{min-height:52px!important}
+}
