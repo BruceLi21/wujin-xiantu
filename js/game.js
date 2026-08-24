@@ -271,7 +271,7 @@ function useInventoryItem(name){
 function renderInventory(){
   const entries=Object.entries(state.inventory).filter(([,n])=>n>0);
   $("bagCount").textContent=`${entries.length} 種物品`;
-  const perPage=6,pageCount=Math.max(1,Math.ceil(entries.length/perPage));
+  const perPage=2,pageCount=Math.max(1,Math.ceil(entries.length/perPage));
   ui.bagPage=Math.max(0,Math.min(ui.bagPage,pageCount-1));
   const visible=entries.slice(ui.bagPage*perPage,ui.bagPage*perPage+perPage);
   $("bagPageText").textContent=`${ui.bagPage+1}/${pageCount}`;
@@ -322,7 +322,7 @@ function renderSkills(){
 function renderZones(){
   restoreEnergy();
   $("energyText").textContent=`體力 ${state.energy} / 5`;
-  const perPage=4;
+  const perPage=2;
   const pageCount=Math.max(1,Math.ceil(zones.length/perPage));
   ui.zonePage=Math.max(0,Math.min(ui.zonePage,pageCount-1));
   const visible=zones.slice(ui.zonePage*perPage,ui.zonePage*perPage+perPage);
@@ -429,7 +429,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V0.9 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V10 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);

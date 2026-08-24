@@ -816,3 +816,32 @@ body{position:fixed;inset:0}
   .bottom-nav{min-height:48px!important}
   .bottom-nav .nav-btn{min-height:45px!important}
 }
+
+
+/* ===== V10 老人友善大字版：不縮字，內容不足改分頁 ===== */
+:root{font-size:18px}
+.topbar{min-height:64px!important;padding:10px 12px 6px!important}
+.topbar .eyebrow{font-size:14px!important;letter-spacing:.10em!important}
+.topbar h1{font-size:30px!important;line-height:1.05!important;letter-spacing:.08em!important}
+.version,.ghost-btn{font-size:16px!important;min-height:42px!important;padding:7px 12px!important}
+.mobile-status{margin:3px 8px 7px!important;gap:5px!important}
+.mobile-status>div{padding:6px 3px!important}
+.mobile-status span{font-size:13px!important}.mobile-status strong{font-size:16px!important}
+.page{padding:0 8px 7px!important}
+.compact-head{height:46px!important}.compact-head strong{font-size:20px!important}.compact-head small,.pager{font-size:15px!important}
+.mini-btn{min-width:40px!important;min-height:38px!important;font-size:18px!important}
+.subtabs{height:46px!important;gap:5px!important}.subtab{font-size:17px!important}
+.battle-strip{height:104px!important;padding:8px 10px!important}.battle-strip-head{font-size:15px!important}.battle-log-compact{font-size:14px!important;line-height:1.4!important;height:68px!important}
+.zone-grid-fixed{grid-template-columns:1fr!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 155px)!important;gap:7px!important}
+.zone-grid-fixed .zone-card{padding:10px!important}.zone-card h3{font-size:20px!important}.zone-card p{font-size:15px!important;line-height:1.35!important;height:auto!important;max-height:42px!important}.zone-level{font-size:14px!important}.zone-btn{min-height:38px!important;font-size:17px!important}.boss-line{font-size:14px!important;padding:5px 7px!important}
+.six-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 46px)!important}
+.alchemy-grid,.equip-grid,.skill-grid{grid-template-columns:1fr!important;grid-template-rows:repeat(2,minmax(0,1fr))!important}
+.alchemy-grid,.skill-grid{height:calc(100% - 46px)!important}.equip-grid{height:calc(100% - 128px)!important}
+.fixed-grid .item-row,.fixed-grid .recipe-row,.fixed-grid .equip-row,.fixed-grid .skill-row{padding:10px!important;gap:6px!important}
+.fixed-grid b{font-size:18px!important}.fixed-grid small{font-size:15px!important;line-height:1.35!important}.fixed-grid button{min-height:38px!important;font-size:17px!important}
+.compact-slots{height:58px!important}.compact-slots .slot{padding:6px!important}.compact-slots .slot span{font-size:13px!important}.compact-slots .slot strong{font-size:15px!important}
+.character-fixed{grid-template-rows:50px auto minmax(0,1fr)!important}.character-header strong{font-size:23px!important}.character-grid-fixed{gap:7px!important}.character-grid-fixed>div{padding:8px!important}.character-grid-fixed span{font-size:15px!important}.character-grid-fixed strong{font-size:19px!important}
+.rename-compact{height:44px!important;grid-template-columns:minmax(0,1fr) 64px 64px!important}.rename-compact input{height:42px!important;font-size:18px!important}.rename-compact button{font-size:16px!important}
+.bottom-nav{min-height:70px!important;padding:4px 4px max(5px,env(safe-area-inset-bottom))!important}.bottom-nav .nav-btn{min-height:62px!important;font-size:16px!important}.bottom-nav .nav-btn span{font-size:25px!important}
+.muted{font-size:15px!important}.section-title>span{font-size:19px!important}.section-title>strong{font-size:17px!important}
+@media(max-height:760px){.topbar{min-height:56px!important}.topbar h1{font-size:25px!important}.bottom-nav{min-height:62px!important}.bottom-nav .nav-btn{min-height:54px!important}.mobile-status span{font-size:12px!important}.mobile-status strong{font-size:15px!important}}
