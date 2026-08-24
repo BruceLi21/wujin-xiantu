@@ -501,7 +501,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V15 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V16 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
@@ -552,12 +552,12 @@ $("cancelRenameBtn").addEventListener("click",()=>{
 $("resetBtn").addEventListener("click",async()=>{if(!confirm("確定重置所有進度？此動作無法復原。"))return;state=defaultSave();render();await writeSave()});
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"&&state)await writeSave()});
 if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./service-worker.js?v=15",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn);
+  navigator.serviceWorker.register("./service-worker.js?v=16",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn);
 }
 bootstrap().catch(err=>{console.error(err);alert("遊戲初始化失敗，請重新整理頁面。")});
 
-/* ===== V15 battle presentation layer ===== */
-window.V15Battle = window.V15Battle || {
+/* ===== V16 battle presentation layer ===== */
+window.V16Battle = window.V16Battle || {
   running:false,
   async play(opts){
     if(this.running) return;

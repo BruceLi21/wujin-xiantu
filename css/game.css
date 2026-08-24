@@ -1427,3 +1427,161 @@ body,button,input,select,textarea{font-size:var(--fs-body)!important}
   .mobile-status>div{min-height:72px!important}
   #page-adventure .zone-btn{min-height:52px!important}
 }
+
+/* ===== V16：實機版面壓縮 + 字級統一 ===== */
+:root{
+  --v16-small:17px;
+  --v16-body:20px;
+  --v16-strong:22px;
+  --v16-section:25px;
+  --v16-title:34px;
+}
+
+/* 統一所有一般文字，不允許頁內任意縮小 */
+body, button, input, select, textarea,
+.muted,.compact-help,.home-tip,.row-copy small,.recipe-copy small,
+.fixed-grid small,.zone-card p,.battle-log-compact,.v14-action .sub,
+.topbar .eyebrow,.mobile-status span,.character-grid-fixed span,
+.small-grid span,.zone-level,.v14-stats,.bottom-nav .nav-btn{
+  font-size:var(--v16-small)!important;
+  line-height:1.35!important;
+}
+button,input,select,textarea,
+.row-copy b,.recipe-copy b,.fixed-grid b,.zone-card h3,.mode-btn strong,
+.mobile-status strong,.character-grid-fixed strong,.small-grid strong,
+.v14-battle-head,.v14-action .main{
+  font-size:var(--v16-body)!important;
+}
+.section-title>span,.compact-head strong,.character-header strong{
+  font-size:var(--v16-section)!important;
+}
+.topbar h1{font-size:var(--v16-title)!important}
+
+/* 主內容改為「由內容決定高度」，不要用撐滿畫面的空白 */
+.page,
+.page.active,
+.page-shell,
+.screen,
+.content,
+.main-content,
+.page-content{
+  min-height:0!important;
+  height:auto!important;
+}
+.main{
+  align-content:start!important;
+}
+
+/* 修煉頁：卡片更緊湊 */
+#page-cultivate .panel,
+#page-cultivate .card,
+#page-cultivate .breakthrough-card{
+  margin-bottom:8px!important;
+}
+#page-cultivate .breakthrough-card{
+  padding:12px!important;
+}
+#page-cultivate .mode-grid{
+  gap:8px!important;
+}
+#page-cultivate .mode-btn{
+  min-height:70px!important;
+  padding:10px 12px!important;
+}
+
+/* 歷練頁：縮掉戰鬥紀錄與副本之間的巨大留白 */
+#page-adventure{
+  align-content:start!important;
+}
+#page-adventure .battle-card,
+#page-adventure .battle-log,
+#page-adventure .panel{
+  min-height:0!important;
+}
+#page-adventure .battle-log-compact{
+  min-height:0!important;
+  height:auto!important;
+  max-height:210px!important;
+  overflow:hidden!important;
+  padding:12px!important;
+}
+#page-adventure .zone-grid-fixed{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:none!important;
+  grid-auto-rows:auto!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+#page-adventure .zone-card{
+  min-height:0!important;
+  height:auto!important;
+  padding:14px!important;
+  gap:6px!important;
+}
+#page-adventure .zone-card h3{
+  margin:0 0 4px!important;
+  font-size:22px!important;
+}
+#page-adventure .zone-card p{
+  margin:0 0 8px!important;
+  font-size:17px!important;
+}
+#page-adventure .zone-actions{
+  margin-top:4px!important;
+}
+#page-adventure .zone-btn{
+  min-height:52px!important;
+  font-size:20px!important;
+}
+
+/* 頂部四格資訊固定同一字級/高度 */
+.mobile-status{
+  gap:6px!important;
+}
+.mobile-status>div{
+  min-height:74px!important;
+  padding:8px 5px!important;
+}
+.mobile-status>div strong,
+#mRealm{
+  font-size:20px!important;
+  line-height:1.15!important;
+}
+
+/* 標題列與頁面區塊壓縮 */
+.section-title{
+  margin:8px 0!important;
+  min-height:54px!important;
+}
+.compact-head{
+  margin-bottom:6px!important;
+}
+
+/* 洞府卡片不要把右側內容撐得忽大忽小 */
+#page-cave .subtab,
+#page-cave button{
+  font-size:18px!important;
+}
+#page-cave .fixed-grid,
+#page-cave .recipe-grid{
+  gap:8px!important;
+}
+
+/* 底部導航仍保留大觸控區，但文字一致 */
+.bottom-nav .nav-btn{
+  font-size:18px!important;
+}
+.bottom-nav .nav-btn span{
+  font-size:25px!important;
+}
+
+/* iPhone 實機高度較小時只壓間距，不再縮字 */
+@media (max-height:780px){
+  .topbar{padding-top:6px!important;padding-bottom:4px!important}
+  .mobile-status>div{min-height:68px!important}
+  .section-title{min-height:48px!important;margin:5px 0!important}
+  #page-adventure .battle-log-compact{max-height:170px!important}
+  #page-adventure .zone-card{padding:11px!important}
+  #page-adventure .zone-btn{min-height:48px!important}
+}
