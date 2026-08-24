@@ -1,16 +1,15 @@
-# 無盡仙途 V0.8 — iPhone 實機重構版
+# 無盡仙途 V0.8.1 — iPhone 單屏修正版
 
-本版依 iPhone Safari 實機畫面重構。
+依 iPhone Safari 實機畫面調整：
 
-- 移除主頁重複的大型人物卡與四張重複資訊卡。
-- 主頁頂部只保留境界 / 修為 / 靈石 / 戰力。
-- 名稱、境界、修煉速度改為一條緊湊身份列。
-- 突破與閉關操作大幅上移，優先在一個手機畫面內完成主要操作。
-- 底部四個導航固定完整顯示：修煉 / 歷練 / 洞府 / 角色。
-- 「角色」頁新增角色名稱修改，可輸入 1～12 個字並保存。
-- 沿用 V0.7 IndexedDB 存檔，不重置進度。
-- 更新 Service Worker cache 到 V0.8。
+- 修煉主頁改成「單屏優先」，整頁禁止外層捲動。
+- 突破詳細資訊改為可展開/收合，預設收合，節省高度。
+- 修行紀錄在主頁隱藏，避免吃掉第一屏空間。
+- 底部導航強制四等分：修煉 / 歷練 / 洞府 / 角色。
+- Safari 下仍由中間功能頁自行捲動；整個遊戲外框不再出現長頁下拉。
+- 保留角色名稱修改與既有 IndexedDB 存檔。
+- Service Worker 更新為 V0.8.1。
 
-GitHub Pages 更新方式：
-把本版 index.html、css、js、manifest.json、service-worker.js 等檔案覆蓋到 repository 根目錄並 Commit。
-GitHub Pages 會自動重新部署。
+GitHub Pages 更新：
+把本版檔案覆蓋到原本 repository 根目錄並 Commit。
+若 iPhone 仍看到舊版，重新整理或移除舊 PWA 後重新加入主畫面。

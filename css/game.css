@@ -273,3 +273,170 @@ main,.main-content{
   .topbar{min-height:52px}
   .mobile-status{margin-bottom:3px!important}
 }
+
+/* V0.8.1 iPhone 單屏修正版 */
+:root{
+  --app-safe-top: env(safe-area-inset-top, 0px);
+  --app-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+html,body{
+  width:100%;
+  height:100%;
+  min-height:100%;
+  overflow:hidden!important;
+}
+body{
+  position:fixed;
+  inset:0;
+  overscroll-behavior:none;
+}
+.game-shell{
+  width:100%!important;
+  max-width:480px!important;
+  height:100%!important;
+  max-height:100%!important;
+  margin:0 auto!important;
+  overflow:hidden!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr) auto!important;
+}
+.topbar{
+  padding:7px 10px 3px!important;
+  min-height:48px!important;
+}
+.topbar .eyebrow{font-size:9px!important}
+.topbar h1{font-size:22px!important;letter-spacing:.12em!important}
+.top-actions .version,.top-actions .ghost-btn{
+  min-height:30px!important;
+  padding:3px 8px!important;
+  font-size:11px!important;
+}
+.mobile-status{
+  margin:0 8px 4px!important;
+  gap:3px!important;
+}
+.mobile-status>div{
+  padding:3px 2px!important;
+  border-radius:6px!important;
+}
+.mobile-status span{font-size:7px!important}
+.mobile-status strong{font-size:10px!important}
+
+.page{
+  height:auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:0 8px 5px!important;
+  -webkit-overflow-scrolling:touch;
+}
+#page-cultivation{
+  overflow:hidden!important;
+}
+#page-cultivation .home-identity{
+  padding:3px 1px 3px!important;
+}
+#page-cultivation .home-identity strong{font-size:17px!important}
+#page-cultivation .home-sub{font-size:9px!important}
+#page-cultivation .progress-card{
+  padding:7px!important;
+  margin-top:4px!important;
+}
+#page-cultivation .bar{
+  height:5px!important;
+  margin:4px 0 5px!important;
+}
+.breakthrough-details{
+  margin:3px 0 5px;
+  border:1px solid #2b2b25;
+  border-radius:8px;
+  background:#0d0e0c;
+}
+.breakthrough-details summary{
+  list-style:none;
+  cursor:pointer;
+  padding:6px 8px;
+  font-size:11px;
+  color:#d7c08b;
+}
+.breakthrough-details summary::-webkit-details-marker{display:none}
+.breakthrough-details summary:after{
+  content:"展開";
+  float:right;
+  color:#77705f;
+  font-size:9px;
+}
+.breakthrough-details[open] summary:after{content:"收合"}
+.breakthrough-details .breakthrough-panel{
+  border:0!important;
+  margin:0!important;
+  padding:0 7px 7px!important;
+  background:transparent!important;
+}
+#page-cultivation #breakthroughBtn{
+  min-height:35px!important;
+  margin-top:4px!important;
+  font-size:13px!important;
+}
+#page-cultivation .cultivation-card{
+  padding:7px!important;
+  margin-top:5px!important;
+}
+#page-cultivation .home-tip{display:none!important}
+#page-cultivation .choice-grid{gap:4px!important}
+#page-cultivation .mode-btn{
+  min-height:40px!important;
+  padding:5px!important;
+}
+#page-cultivation .mode-btn strong{font-size:11px!important}
+#page-cultivation .mode-btn small{font-size:8px!important}
+#page-cultivation .log-card{display:none!important}
+
+.bottom-nav{
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  width:100%!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:0!important;
+  padding:3px 4px max(4px,var(--app-safe-bottom))!important;
+  overflow:hidden!important;
+  background:#070807!important;
+  border-top:1px solid #2f2d25!important;
+}
+.bottom-nav .nav-btn{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:0!important;
+  width:100%!important;
+  min-height:48px!important;
+  padding:2px 0!important;
+  margin:0!important;
+  font-size:9px!important;
+  overflow:hidden!important;
+}
+.bottom-nav .nav-btn span{
+  font-size:15px!important;
+  line-height:1!important;
+  margin:0 0 2px!important;
+}
+
+/* other pages may scroll internally, but the whole browser page will not */
+#page-adventure,#page-cave,#page-character{
+  overflow-y:auto!important;
+  padding-bottom:8px!important;
+}
+
+@media (max-height:760px){
+  .topbar{min-height:44px!important}
+  .topbar h1{font-size:20px!important}
+  .mobile-status{margin-bottom:2px!important}
+  #page-cultivation .home-identity{padding-top:1px!important}
+  #page-cultivation .progress-card{margin-top:2px!important}
+  #page-cultivation .cultivation-card{margin-top:3px!important}
+}

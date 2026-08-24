@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="無盡仙途" />
-  <title>無盡仙途 V0.8</title>
+  <title>無盡仙途 V0.8.1</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" href="./css/game.css" />
 </head>
@@ -19,7 +19,7 @@
         <h1>無盡仙途</h1>
       </div>
       <div class="top-actions">
-        <span class="version">V0.8</span>
+        <span class="version">V0.8.1</span>
         <button id="resetBtn" class="ghost-btn" type="button">重置</button>
       </div>
     </header>
@@ -46,7 +46,7 @@
         </div>
         <div class="bar"><div id="progressBar" class="bar-fill"></div></div>
 
-        <div class="breakthrough-panel">
+        <details class="breakthrough-details"><summary>突破資訊</summary><div class="breakthrough-panel">
           <div class="breakthrough-row">
             <span>突破成功率</span>
             <strong id="breakthroughRate">--</strong>
@@ -61,7 +61,7 @@
             <span id="pillCountText">×0</span>
           </div>
           <div id="injuryNotice" class="injury-notice hidden">內傷未癒：修煉效率 -30%，突破率 -15%</div>
-        </div>
+        </div></details>
 
         <button id="breakthroughBtn" class="primary-btn" type="button" disabled>修為未滿</button>
       </section>
