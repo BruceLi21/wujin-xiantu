@@ -195,3 +195,81 @@ main,.main-content{
 @media (min-width:600px){
   .game-shell{max-width:480px;margin:0 auto}
 }
+
+/* V0.8 iPhone 實機重構：主畫面一屏優先 */
+.topbar{padding:8px 14px 5px!important;min-height:58px}
+.topbar .eyebrow{font-size:10px!important;margin-bottom:1px!important}
+.topbar h1{font-size:25px!important;line-height:1.05!important;margin:0!important}
+.top-actions{gap:6px!important}
+.version,.ghost-btn{min-height:34px!important;padding:5px 10px!important;font-size:12px!important}
+
+.mobile-status{margin:3px 10px 6px!important;gap:4px!important}
+.mobile-status>div{padding:4px 2px!important;border-radius:7px!important}
+.mobile-status span{font-size:8px!important}
+.mobile-status strong{font-size:11px!important;margin-top:1px!important}
+
+.home-identity{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 2px 5px;gap:8px
+}
+.home-identity>div:first-child{display:flex;align-items:center;gap:7px}
+.home-identity strong{font-size:19px}
+.home-sub{display:flex;flex-direction:column;text-align:right;font-size:10px;color:#9c9279;line-height:1.4}
+.home-sub b{color:#ead7a0;font-weight:600}
+.page{padding:0 10px 7px!important}
+.progress-card{padding:9px!important}
+.progress-card .section-title{margin-bottom:5px!important}
+.bar{height:7px!important;margin:5px 0 7px!important}
+.breakthrough-panel{padding:7px!important;margin-top:6px!important}
+.breakthrough-row{font-size:12px!important}
+.small-grid{gap:4px!important;margin-top:5px!important}
+.small-grid>div{padding:5px!important}
+.small-grid span{font-size:8px!important}
+.small-grid strong{font-size:11px!important}
+.breakthrough-tools{margin-top:5px!important}
+#usePillBtn{min-height:30px!important;padding:4px 8px!important;font-size:11px!important}
+#breakthroughBtn{min-height:39px!important;margin-top:7px!important}
+
+.cultivation-card{padding:9px!important}
+.cultivation-card .section-title{margin-bottom:3px!important}
+.home-tip{margin:2px 0 6px!important}
+.choice-grid{gap:6px!important}
+.mode-btn{min-height:46px!important;padding:6px!important}
+.mode-btn strong{font-size:12px!important}
+.mode-btn small{font-size:9px!important}
+
+.log-card{padding:8px!important}
+.log-list{max-height:72px!important}
+.log-item{font-size:10px!important;padding:3px 0!important}
+
+.bottom-nav{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  height:auto!important;
+  min-height:58px!important;
+  padding:4px 4px max(5px,env(safe-area-inset-bottom))!important;
+  overflow:visible!important;
+}
+.nav-btn{min-width:0!important;width:auto!important;padding:4px 1px!important;font-size:10px!important}
+.nav-btn span{font-size:17px!important;margin-bottom:1px!important}
+
+.rename-box{border:1px solid #39372d;border-radius:10px;padding:10px;margin:8px 0 10px}
+.rename-box label{display:block;font-size:11px;color:#a89c7e;margin-bottom:5px}
+.rename-row{display:grid;grid-template-columns:1fr 72px;gap:7px}
+.rename-row input{
+  width:100%;min-width:0;box-sizing:border-box;background:#090a08;color:#f0e5c6;
+  border:1px solid #514a36;border-radius:8px;padding:8px 9px;font-size:16px;outline:none
+}
+.rename-row input:focus{border-color:#b6974d}
+.rename-row button{min-height:38px!important}
+.rename-box small{display:block;margin-top:5px;color:#77705f;font-size:9px}
+.character-title-row{display:flex;align-items:center;justify-content:space-between}
+.character-title-row h2{margin:0}
+.character-grid{gap:6px!important}
+.character-grid>div{padding:8px!important}
+
+@media (max-height:740px){
+  .log-card{display:none}
+  .topbar{min-height:52px}
+  .mobile-status{margin-bottom:3px!important}
+}

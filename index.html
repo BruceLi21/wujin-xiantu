@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="無盡仙途" />
-  <title>無盡仙途 V0.7</title>
+  <title>無盡仙途 V0.8</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" href="./css/game.css" />
 </head>
@@ -19,7 +19,7 @@
         <h1>無盡仙途</h1>
       </div>
       <div class="top-actions">
-        <span class="version">V0.7</span>
+        <span class="version">V0.8</span>
         <button id="resetBtn" class="ghost-btn" type="button">重置</button>
       </div>
     </header>
@@ -31,29 +31,14 @@
     </section>
 
 
-    <section class="hero card">
-      <div class="portrait" aria-hidden="true">
-        <div class="moon"></div>
-        <div class="silhouette">仙</div>
-      </div>
-      <div class="hero-copy">
-        <div class="name-row">
+    <section id="page-cultivation" class="page active">
+      <section class="home-identity">
+        <div>
           <strong id="playerName">李柏儒</strong>
           <span class="tag">散修</span>
         </div>
-        <div class="realm" id="realmText">煉氣一層</div>
-        <div class="quote">「大道無情，我自逍遙。」</div>
-      </div>
-    </section>
-
-    <section class="stats-grid">
-      <div class="stat card"><span>修為</span><strong id="cultivationText">0</strong></div>
-      <div class="stat card"><span>靈石</span><strong id="stoneText">120</strong></div>
-      <div class="stat card"><span>修煉速度</span><strong id="rateText">+1 / 秒</strong></div>
-      <div class="stat card"><span>道心</span><strong id="daoHeartText">0</strong></div>
-    </section>
-
-    <section id="page-cultivation" class="page active">
+        <div class="home-sub"><span id="realmText">煉氣一層</span><span>修煉 <b id="rateText">+1.0 / 秒</b></span></div>
+      </section>
       <section class="card progress-card">
         <div class="section-title">
           <span>當前境界</span>
@@ -86,7 +71,7 @@
           <span>閉關修煉</span>
           <strong id="runningStatus">吐納中</strong>
         </div>
-        <p class="muted">關閉遊戲後仍會累積離線收益；恢復遊戲時自動補發。</p>
+        <p class="muted home-tip">離線仍會累積收益。</p>
         <div class="choice-grid">
           <button class="mode-btn active" data-mode="breath" type="button">
             <strong>吐納修煉</strong><small>修為效率最高</small>
@@ -159,8 +144,19 @@
     </section>
 
     <section id="page-character" class="page">
-      <section class="card placeholder">
-        <h2>人物</h2>
+      <section class="card placeholder character-card">
+        <div class="character-title-row">
+          <h2>角色</h2>
+          <span class="tag">散修</span>
+        </div>
+        <div class="rename-box">
+          <label for="playerNameInput">角色名稱</label>
+          <div class="rename-row">
+            <input id="playerNameInput" maxlength="12" autocomplete="off" />
+            <button id="renameBtn" class="secondary-btn" type="button">修改</button>
+          </div>
+          <small>1～12 個字；修改後自動保存。</small>
+        </div>
         <div class="character-grid">
           <div><span>境界</span><strong id="charRealm">煉氣一層</strong></div>
           <div><span>道心</span><strong id="charDao">0</strong></div>

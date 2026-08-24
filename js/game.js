@@ -82,7 +82,7 @@ const events=[
 
 function defaultSave(){
   return {
-    version:5,playerName:"李柏儒",realmIndex:0,cultivation:0,spiritStone:120,daoHeart:0,
+    version:6,playerName:"李柏儒",realmIndex:0,cultivation:0,spiritStone:120,daoHeart:0,
     injuryUntil:0,mode:"breath",energy:5,energyUpdatedAt:Date.now(),lastTickAt:Date.now(),lastSavedAt:Date.now(),
     inventory:{},equipmentInventory:[],equipmentMeta:{},equipped:{weapon:null,armor:null,accessory:null},
     learnedSkills:["吐納訣"],equippedSkills:["吐納訣"],skillLevels:{"吐納訣":1},
@@ -122,7 +122,7 @@ function migrateSave(save){
   const base=defaultSave();
   if(!save)return base;
   const s={...base,...save};
-  s.version=5;
+  s.version=6;
   s.inventory={...(save.inventory||{})};
   s.equipmentInventory=Array.isArray(save.equipmentInventory)?save.equipmentInventory:[];
   s.equipmentMeta={...(save.equipmentMeta||{})};
@@ -322,11 +322,10 @@ function renderZones(){
 
 function render(){
   restoreEnergy();const r=realm(),chance=breakthroughChance();
-  $("playerName").textContent=state.playerName;$("realmText").textContent=r.name;$("cultivationText").textContent=fmt(state.cultivation);$("stoneText").textContent=fmt(state.spiritStone);
-  $("rateText").textContent=`+${currentRate().toFixed(1)} / 秒`;$("daoHeartText").textContent=fmt(state.daoHeart);$("progressLabel").textContent=`${fmt(state.cultivation)} / ${fmt(r.need)}`;$("progressBar").style.width=`${Math.min(100,state.cultivation/r.need*100)}%`;
+  $("playerName").textContent=state.playerName;$("realmText").textContent=r.name;$("rateText").textContent=`+${currentRate().toFixed(1)} / 秒`;$("playerNameInput").value=state.playerName;$("progressLabel").textContent=`${fmt(state.cultivation)} / ${fmt(r.need)}`;$("progressBar").style.width=`${Math.min(100,state.cultivation/r.need*100)}%`;
   $("breakthroughRate").textContent=state.realmIndex>=realms.length-1?"已達版本上限":`${Math.round(chance*100)}%`;$("baseRate").textContent=state.realmIndex>=realms.length-1?"--":`${Math.round(r.breakthrough*100)}%`;$("daoBonus").textContent=`+${Math.min(20,state.daoHeart)}%`;$("pillBonus").textContent=`+${Math.round(state.activePillBonus*100)}%`;
   $("pillCountText").textContent=`×${state.inventory["築基丹"]||0}`;$("usePillBtn").disabled=!!state.activePillBonus||!(state.inventory["築基丹"]||0);$("injuryNotice").classList.toggle("hidden",!isInjured());
-  const canBreak=state.cultivation>=r.need&&state.realmIndex<realms.length-1;$("breakthroughBtn").disabled=!canBreak;$("breakthroughBtn").textContent=state.realmIndex>=realms.length-1?"V0.8 開放更高境界":(canBreak?"嘗試突破":"修為未滿");
+  const canBreak=state.cultivation>=r.need&&state.realmIndex<realms.length-1;$("breakthroughBtn").disabled=!canBreak;$("breakthroughBtn").textContent=state.realmIndex>=realms.length-1?"已達目前最高境界":(canBreak?"嘗試突破":"修為未滿");
   $("runningStatus").textContent=state.mode==="wander"?"歷練中":"吐納中";document.querySelectorAll(".mode-btn").forEach(b=>b.classList.toggle("active",b.dataset.mode===state.mode));
   $("logList").innerHTML=state.logs.map(x=>`<div class="log-item">${escapeHTML(x)}</div>`).join("");
   $("mRealm").textContent=r.name;
@@ -413,7 +412,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V0.7 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V0.8 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
@@ -426,6 +425,17 @@ $("testAlchemyBtn").addEventListener("click",async()=>{
   render();
   await writeSave();
 });
+
+$("renameBtn").addEventListener("click",async()=>{
+  const name=$("playerNameInput").value.trim();
+  if(!name){alert("角色名稱不能空白。");$("playerNameInput").value=state.playerName;return}
+  if([...name].length>12){alert("角色名稱最多 12 個字。");return}
+  state.playerName=name;
+  addLog(`道號已改為「${name}」。`);
+  render();
+  await writeSave();
+});
+$("playerNameInput").addEventListener("keydown",e=>{if(e.key==="Enter")$("renameBtn").click()});
 
 $("resetBtn").addEventListener("click",async()=>{if(!confirm("確定重置所有進度？此動作無法復原。"))return;state=defaultSave();render();await writeSave()});
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"&&state)await writeSave()});
