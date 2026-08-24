@@ -322,7 +322,7 @@ function renderZones(){
 
 function render(){
   restoreEnergy();const r=realm(),chance=breakthroughChance();
-  $("playerName").textContent=state.playerName;$("realmText").textContent=r.name;$("rateText").textContent=`+${currentRate().toFixed(1)} / 秒`;$("playerNameInput").value=state.playerName;$("progressLabel").textContent=`${fmt(state.cultivation)} / ${fmt(r.need)}`;$("progressBar").style.width=`${Math.min(100,state.cultivation/r.need*100)}%`;
+  $("playerName").textContent=state.playerName;$("realmText").textContent=r.name;$("rateText").textContent=`+${currentRate().toFixed(1)} / 秒`;if(document.activeElement!==$("playerNameInput"))$("playerNameInput").value=state.playerName;$("progressLabel").textContent=`${fmt(state.cultivation)} / ${fmt(r.need)}`;$("progressBar").style.width=`${Math.min(100,state.cultivation/r.need*100)}%`;
   $("breakthroughRate").textContent=state.realmIndex>=realms.length-1?"已達版本上限":`${Math.round(chance*100)}%`;$("baseRate").textContent=state.realmIndex>=realms.length-1?"--":`${Math.round(r.breakthrough*100)}%`;$("daoBonus").textContent=`+${Math.min(20,state.daoHeart)}%`;$("pillBonus").textContent=`+${Math.round(state.activePillBonus*100)}%`;
   $("pillCountText").textContent=`×${state.inventory["築基丹"]||0}`;$("usePillBtn").disabled=!!state.activePillBonus||!(state.inventory["築基丹"]||0);$("injuryNotice").classList.toggle("hidden",!isInjured());
   const canBreak=state.cultivation>=r.need&&state.realmIndex<realms.length-1;$("breakthroughBtn").disabled=!canBreak;$("breakthroughBtn").textContent=state.realmIndex>=realms.length-1?"已達目前最高境界":(canBreak?"嘗試突破":"修為未滿");
@@ -412,7 +412,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V0.8.1 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V0.8.2 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
