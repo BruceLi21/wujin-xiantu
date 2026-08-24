@@ -9,10 +9,10 @@ for /f "tokens=5" %%P in ('netstat -ano ^| findstr ":5173" ^| findstr "LISTENING
     taskkill /PID %%P /F >nul 2>nul
 )
 
-echo Starting Wujin Xiantu V16...
+echo Starting Wujin Xiantu V17...
 start "Wujin Xiantu Server" /min cmd /c "cd /d ""%~dp0"" && node server.js"
 timeout /t 2 /nobreak >nul
-start "" "http://localhost:5173/?v=16"
+start "" "http://localhost:5173/?v=17"
 exit /b 0
 
 :NONODE

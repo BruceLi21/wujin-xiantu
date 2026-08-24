@@ -1,1587 +1,246 @@
+
 :root{
-  color-scheme:dark;
-  --bg:#090a09; --panel:#121310; --line:#363329; --text:#f1ead9;
-  --muted:#aaa28f; --gold:#c7ac6a; --gold2:#8a7341; --green:#84a77a; --red:#b86f64;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:#050605;color:var(--text);font-family:ui-serif,"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif}
-body{min-height:100%;background:radial-gradient(circle at 50% 8%,rgba(255,255,255,.06),transparent 28rem),linear-gradient(#090a09,#050605 70%)}
-button{font:inherit}
-.game-shell{width:min(100%,480px);margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 14px calc(92px + env(safe-area-inset-bottom))}
-.topbar{display:flex;align-items:end;justify-content:space-between;padding:6px 2px 16px}
-.top-actions{display:flex;gap:8px;align-items:center}.version{font-size:11px;color:var(--gold);border:1px solid var(--gold2);border-radius:999px;padding:5px 8px}
-.eyebrow{font-size:12px;color:var(--muted);letter-spacing:.18em}h1{font-size:28px;letter-spacing:.18em;margin:5px 0 0}
-.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(24,25,21,.96),rgba(14,15,13,.96));border-radius:16px;box-shadow:inset 0 1px rgba(255,255,255,.03)}
-.hero{min-height:220px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:18px}.hero:after{content:"";position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,rgba(0,0,0,.72))}
-.portrait{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}.moon{width:165px;height:165px;border:16px solid rgba(220,213,192,.12);border-radius:50%}.silhouette{position:absolute;font-size:108px;color:rgba(235,229,211,.2)}
-.hero-copy{z-index:1}.name-row{display:flex;align-items:center;gap:10px;font-size:22px}.tag{font-size:12px;border:1px solid var(--gold2);border-radius:999px;color:var(--gold);padding:4px 9px}.realm{margin-top:6px;color:#d8cfbb}.quote{margin-top:12px;color:#9c9481;font-size:13px}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.stat{padding:14px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;margin-top:5px;font-size:19px}
-.page{display:none}.page.active{display:block}
-.progress-card,.cultivation-card,.log-card,.adventure-head,.battle-card,.inventory-card,.equipment-card,.skill-card,.placeholder{padding:16px;margin-top:10px}
-.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.section-title>span{font-size:16px;font-weight:700}.section-title>strong{color:var(--gold);font-size:14px}
-.bar{height:10px;background:#24241f;border-radius:999px;overflow:hidden;margin:14px 0}.bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold2),#d8c080);transition:width .3s ease}
-.breakthrough-panel{border:1px solid #2b2b25;border-radius:12px;padding:12px;margin-bottom:12px;background:#0d0e0c}
-.breakthrough-row{display:flex;justify-content:space-between}.breakthrough-row strong{color:var(--gold)}
-.small-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.small-grid div{background:#11120f;border-radius:9px;padding:8px}.small-grid span{display:block;color:var(--muted);font-size:11px}.small-grid strong{display:block;margin-top:3px;font-size:13px}
-.breakthrough-tools{display:flex;align-items:center;gap:10px;margin-top:10px}.breakthrough-tools span{color:var(--gold)}
-.injury-notice{margin-top:10px;padding:9px;border:1px solid #573b35;color:#d79588;border-radius:9px;font-size:12px}.hidden{display:none}
-.primary-btn,.secondary-btn,.ghost-btn,.mode-btn,.nav-btn,.text-btn,.zone-btn,.equip-btn,.skill-btn{border:0;cursor:pointer}
-.primary-btn{width:100%;min-height:48px;border-radius:12px;background:linear-gradient(#b49758,#765f32);color:#fff9e8;font-weight:800;letter-spacing:.08em}.primary-btn:disabled{opacity:.38;cursor:not-allowed}
-.secondary-btn{min-height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--gold2);background:#161712;color:var(--text)}.secondary-btn:disabled{opacity:.35}
-.ghost-btn{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
-.muted{color:var(--muted);font-size:13px;line-height:1.7}.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.mode-btn{text-align:left;padding:13px;background:#0e0f0d;color:var(--text);border:1px solid var(--line);border-radius:12px}.mode-btn strong,.mode-btn small{display:block}.mode-btn small{margin-top:5px;color:var(--muted)}.mode-btn.active{border-color:var(--gold2);box-shadow:inset 0 0 0 1px rgba(199,172,106,.18)}
-.log-list{display:grid;gap:8px;margin-top:12px;max-height:220px;overflow:auto}.log-item{padding:10px;border-left:2px solid var(--gold2);background:rgba(255,255,255,.025);font-size:13px;color:#cfc7b4;line-height:1.55}.text-btn{background:transparent;color:var(--gold);padding:4px}
-.zone-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.zone-card{padding:14px}.zone-top{display:flex;justify-content:space-between;gap:12px}.zone-card h3{margin:0 0 6px;font-size:17px}.zone-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.zone-level{color:var(--gold);font-size:12px}.zone-btn{margin-top:12px;width:100%;min-height:44px;border-radius:10px;background:#171813;border:1px solid var(--gold2);color:var(--text)}.zone-btn:disabled{opacity:.35}
-.battle-log{margin-top:12px;min-height:110px;white-space:pre-line;color:#cfc7b4;line-height:1.65;font-size:13px}
-.inventory-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.equipment-bag,.skill-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.item-row,.equip-row,.skill-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px;border:1px solid #292921;border-radius:10px;background:#0d0e0c}.item-row strong,.equip-row strong,.skill-row strong{color:var(--gold)}.row-copy{min-width:0}.row-copy b,.row-copy small{display:block}.row-copy small{color:var(--muted);margin-top:4px;line-height:1.4}
-.equipment-slots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.slot{padding:10px;background:#0d0e0c;border:1px solid #292921;border-radius:10px}.slot span,.slot strong{display:block}.slot span{color:var(--muted);font-size:11px}.slot strong{margin-top:4px}
-.equip-btn,.skill-btn{min-height:36px;border-radius:9px;padding:0 10px;background:#171813;border:1px solid var(--gold2);color:var(--text);white-space:nowrap}
-.empty{color:var(--muted);font-size:13px;padding:8px 0}.character-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.character-grid>div{padding:12px;background:#0d0e0c;border:1px solid #292921;border-radius:10px}.character-grid span,.character-grid strong{display:block}.character-grid span{color:var(--muted);font-size:12px}.character-grid strong{margin-top:4px}
-.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,480px);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px max(8px,env(safe-area-inset-bottom));background:rgba(7,8,7,.96);border-top:1px solid var(--line);backdrop-filter:blur(12px);z-index:20}.nav-btn{min-height:58px;background:transparent;color:#766f60;display:grid;gap:3px;place-items:center;font-size:12px}.nav-btn span{font-size:21px}.nav-btn.active{color:var(--gold)}
-dialog{border:0;padding:0;background:transparent;color:var(--text)}dialog::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(4px)}.dialog-card{width:min(88vw,390px);border:1px solid var(--gold2);border-radius:16px;background:#11120f;padding:22px}.dialog-card h2{margin:0 0 8px}.offline-reward{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.offline-reward>div{padding:12px;background:#0b0c0a;border:1px solid var(--line);border-radius:10px}.offline-reward span,.offline-reward strong{display:block}.offline-reward span{color:var(--muted);font-size:12px}.offline-reward strong{font-size:20px;margin-top:4px;color:var(--gold)}.event-rewards{margin:14px 0;padding:12px;border:1px solid #302d24;border-radius:10px;background:#0d0e0c;line-height:1.7;color:#d8cfbb}
-@media (orientation: landscape) and (max-height: 500px){body:before{content:"請將手機轉回直式";position:fixed;inset:0;z-index:999;background:#070807;color:#efe6cf;display:grid;place-items:center;font-size:20px;letter-spacing:.1em}}
-
-.dev-box{margin:10px 0 4px;border:1px dashed #3b392f;border-radius:10px;padding:9px;color:var(--muted)}
-.dev-box summary{cursor:pointer;margin-bottom:8px}
-.quality-common{color:#c9c2b0}.quality-good{color:#83ad7a}.quality-superior{color:#79a8c9}.quality-exquisite{color:#b28bd1}.quality-spirit{color:#d5b25d}
-.gear-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
-.gear-chip{font-size:11px;padding:2px 6px;border:1px solid #34342c;border-radius:999px;color:#bdb49f}
-.zone-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.zone-actions .zone-btn{margin-top:0}
-.boss-line{margin-top:10px;padding:8px 10px;border:1px solid #5a4927;border-radius:9px;background:#17130c;color:#d7bd77;font-size:12px}
-.boss-btn{background:linear-gradient(#332413,#1a120b)!important;border-color:#9b7131!important}
-.alchemy-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
-.recipe-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:11px;border:1px solid #292921;border-radius:10px;background:#0d0e0c}
-.recipe-copy{min-width:0}.recipe-copy b,.recipe-copy small{display:block}.recipe-copy small{margin-top:4px;color:var(--muted);line-height:1.45}
-.recipe-btn,.item-use-btn,.skill-upgrade-btn{min-height:36px;border-radius:9px;padding:0 10px;background:#171813;border:1px solid var(--gold2);color:var(--text);white-space:nowrap;cursor:pointer}
-.recipe-btn:disabled,.item-use-btn:disabled,.skill-upgrade-btn:disabled{opacity:.35;cursor:not-allowed}
-.item-actions{display:flex;align-items:center;gap:8px}.skill-actions{display:flex;flex-direction:column;gap:6px;align-items:stretch}.skill-level{font-size:11px;color:var(--gold);margin-top:2px}
-
-.battle-card-top{margin-bottom:10px}
-
-/* V0.6 直式手機緊湊雙欄 */
-.compact-help{margin:6px 0 8px;line-height:1.45}
-.battle-card-top{padding:12px;margin-top:8px;margin-bottom:8px}
-.battle-log{min-height:64px;max-height:110px;overflow:auto;font-size:12px;line-height:1.45;margin-top:8px}
-
-.zone-card{padding:10px;min-width:0}
-.zone-top{display:block}
-.zone-card h3{font-size:15px;margin:0 0 3px}
-.zone-card p{font-size:11px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.zone-level{font-size:11px;margin-top:6px}
-.zone-actions{grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
-.zone-btn{min-height:38px;font-size:12px;padding:5px}
-.boss-line{font-size:11px;padding:6px 7px;margin-top:7px}
-
-.recipe-row,.equip-row,.skill-row,.item-row{
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-  gap:7px;
-  min-width:0;
-  padding:9px;
-}
-.recipe-copy b,.row-copy b{font-size:14px}
-.recipe-copy small,.row-copy small{font-size:11px;line-height:1.35}
-.recipe-btn,.equip-btn,.skill-btn,.skill-upgrade-btn,.item-use-btn{width:100%;min-height:34px;font-size:12px}
-.item-actions{justify-content:space-between}
-.skill-actions{display:grid;grid-template-columns:1fr;gap:5px}
-.gear-meta{gap:4px}
-.gear-chip{font-size:10px;padding:2px 5px}
-.equipment-slots{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.slot{padding:8px}
-.slot span{font-size:10px}
-.slot strong{font-size:12px;word-break:break-word}
-
-.alchemy-card,.equipment-card,.skill-card,.inventory-card{padding:12px;margin-top:8px}
-.dev-box{margin:6px 0}
-.section-title>span{font-size:15px}
-.section-title>strong{font-size:12px}
-
-@media (max-width:360px){
-  .game-shell{padding-left:8px;padding-right:8px}
-  .zone-list,.alchemy-list,.equipment-bag,.skill-list,.inventory-list{gap:6px}
-  .zone-card,.recipe-row,.equip-row,.skill-row,.item-row{padding:8px}
-  .zone-card h3{font-size:14px}
-}
-
-/* V0.7 手機單屏式 UI 重構 */
-html,body{height:100%;overflow:hidden}
-body{overscroll-behavior:none}
-.game-shell{
-  height:100dvh;
-  max-height:100dvh;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  padding-bottom:0!important;
-}
-.app-header{flex:0 0 auto;padding-top:10px;padding-bottom:6px}
-.mobile-status{
-  flex:0 0 auto;
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:5px;
-  margin:0 12px 7px;
-}
-.mobile-status>div{
-  border:1px solid #39372d;
-  border-radius:8px;
-  padding:5px 4px;
-  text-align:center;
-  min-width:0;
-  background:#0d0e0c;
-}
-.mobile-status span{display:block;font-size:9px;color:#9c9279}
-.mobile-status strong{
-  display:block;
-  margin-top:2px;
-  font-size:12px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  color:#ead7a0;
-}
-main,.main-content{
-  flex:1 1 auto;
-  min-height:0;
-  overflow:hidden;
-}
-.page{
-  height:100%;
-  min-height:0;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  scrollbar-width:thin;
-  padding:0 12px 12px;
-}
-.page::-webkit-scrollbar{width:3px}
-.bottom-nav{
-  position:relative!important;
-  bottom:auto!important;
-  left:auto!important;
-  right:auto!important;
-  flex:0 0 auto;
-  width:100%;
-  z-index:50;
-  padding-bottom:max(7px,env(safe-area-inset-bottom));
-  background:#080906;
-}
-.card{margin-top:7px!important;padding:10px!important;border-radius:11px}
-.hero-card{min-height:auto!important;padding:11px!important}
-.hero-card .seal{transform:scale(.72);transform-origin:center}
-.stat-grid{gap:6px!important}
-.stat-card{padding:8px!important;min-height:auto!important}
-.breakthrough-card{padding:10px!important}
-.breakthrough-detail{gap:5px!important}
-.mode-card{padding:10px!important}
-.zone-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
-.zone-card{min-height:145px;display:flex;flex-direction:column}
-.zone-actions{margin-top:auto!important}
-.battle-card-top{position:sticky;top:0;z-index:10;background:#10110e}
-.battle-log{max-height:72px!important;min-height:48px!important}
-.inventory-list,.alchemy-list,.equipment-bag,.skill-list{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-}
-.inventory-list .item-row,.alchemy-list .recipe-row,.equipment-bag .equip-row,.skill-list .skill-row{
-  min-height:118px;
-}
-.equipment-slots{position:sticky;top:0;z-index:9;background:#0b0c09;padding:5px 0}
-.dev-box{font-size:11px}
-.muted{font-size:11px}
-.section-title{margin-bottom:4px}
-.log-list{max-height:160px;overflow:auto}
-@media (min-width:600px){
-  .game-shell{max-width:480px;margin:0 auto}
-}
-
-/* V0.8 iPhone 實機重構：主畫面一屏優先 */
-.topbar{padding:8px 14px 5px!important;min-height:58px}
-.topbar .eyebrow{font-size:10px!important;margin-bottom:1px!important}
-.topbar h1{font-size:25px!important;line-height:1.05!important;margin:0!important}
-.top-actions{gap:6px!important}
-.version,.ghost-btn{min-height:34px!important;padding:5px 10px!important;font-size:12px!important}
-
-.mobile-status{margin:3px 10px 6px!important;gap:4px!important}
-.mobile-status>div{padding:4px 2px!important;border-radius:7px!important}
-.mobile-status span{font-size:8px!important}
-.mobile-status strong{font-size:11px!important;margin-top:1px!important}
-
-.home-identity{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:7px 2px 5px;gap:8px
-}
-.home-identity>div:first-child{display:flex;align-items:center;gap:7px}
-.home-identity strong{font-size:19px}
-.home-sub{display:flex;flex-direction:column;text-align:right;font-size:10px;color:#9c9279;line-height:1.4}
-.home-sub b{color:#ead7a0;font-weight:600}
-.page{padding:0 10px 7px!important}
-.progress-card{padding:9px!important}
-.progress-card .section-title{margin-bottom:5px!important}
-.bar{height:7px!important;margin:5px 0 7px!important}
-.breakthrough-panel{padding:7px!important;margin-top:6px!important}
-.breakthrough-row{font-size:12px!important}
-.small-grid{gap:4px!important;margin-top:5px!important}
-.small-grid>div{padding:5px!important}
-.small-grid span{font-size:8px!important}
-.small-grid strong{font-size:11px!important}
-.breakthrough-tools{margin-top:5px!important}
-#usePillBtn{min-height:30px!important;padding:4px 8px!important;font-size:11px!important}
-#breakthroughBtn{min-height:39px!important;margin-top:7px!important}
-
-.cultivation-card{padding:9px!important}
-.cultivation-card .section-title{margin-bottom:3px!important}
-.home-tip{margin:2px 0 6px!important}
-.choice-grid{gap:6px!important}
-.mode-btn{min-height:46px!important;padding:6px!important}
-.mode-btn strong{font-size:12px!important}
-.mode-btn small{font-size:9px!important}
-
-.log-card{padding:8px!important}
-.log-list{max-height:72px!important}
-.log-item{font-size:10px!important;padding:3px 0!important}
-
-.bottom-nav{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  height:auto!important;
-  min-height:58px!important;
-  padding:4px 4px max(5px,env(safe-area-inset-bottom))!important;
-  overflow:visible!important;
-}
-.nav-btn{min-width:0!important;width:auto!important;padding:4px 1px!important;font-size:10px!important}
-.nav-btn span{font-size:17px!important;margin-bottom:1px!important}
-
-.rename-box{border:1px solid #39372d;border-radius:10px;padding:10px;margin:8px 0 10px}
-.rename-box label{display:block;font-size:11px;color:#a89c7e;margin-bottom:5px}
-.rename-row{display:grid;grid-template-columns:1fr 72px;gap:7px}
-.rename-row input{
-  width:100%;min-width:0;box-sizing:border-box;background:#090a08;color:#f0e5c6;
-  border:1px solid #514a36;border-radius:8px;padding:8px 9px;font-size:16px;outline:none
-}
-.rename-row input:focus{border-color:#b6974d}
-.rename-row button{min-height:38px!important}
-.rename-box small{display:block;margin-top:5px;color:#77705f;font-size:9px}
-.character-title-row{display:flex;align-items:center;justify-content:space-between}
-.character-title-row h2{margin:0}
-.character-grid{gap:6px!important}
-.character-grid>div{padding:8px!important}
-
-@media (max-height:740px){
-  .log-card{display:none}
-  .topbar{min-height:52px}
-  .mobile-status{margin-bottom:3px!important}
-}
-
-/* V0.8.1 iPhone 單屏修正版 */
-:root{
-  --app-safe-top: env(safe-area-inset-top, 0px);
-  --app-safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-html,body{
-  width:100%;
-  height:100%;
-  min-height:100%;
-  overflow:hidden!important;
-}
-body{
-  position:fixed;
-  inset:0;
-  overscroll-behavior:none;
-}
-.game-shell{
-  width:100%!important;
-  max-width:480px!important;
-  height:100%!important;
-  max-height:100%!important;
-  margin:0 auto!important;
-  overflow:hidden!important;
-  padding:0!important;
-  display:grid!important;
-  grid-template-rows:auto auto minmax(0,1fr) auto!important;
-}
-.topbar{
-  padding:7px 10px 3px!important;
-  min-height:48px!important;
-}
-.topbar .eyebrow{font-size:9px!important}
-.topbar h1{font-size:22px!important;letter-spacing:.12em!important}
-.top-actions .version,.top-actions .ghost-btn{
-  min-height:30px!important;
-  padding:3px 8px!important;
-  font-size:11px!important;
-}
-.mobile-status{
-  margin:0 8px 4px!important;
-  gap:3px!important;
-}
-.mobile-status>div{
-  padding:3px 2px!important;
-  border-radius:6px!important;
-}
-.mobile-status span{font-size:7px!important}
-.mobile-status strong{font-size:10px!important}
-
-.page{
-  height:auto!important;
-  min-height:0!important;
-  overflow-y:auto!important;
-  overflow-x:hidden!important;
-  padding:0 8px 5px!important;
-  -webkit-overflow-scrolling:touch;
-}
-#page-cultivation{
-  overflow:hidden!important;
-}
-#page-cultivation .home-identity{
-  padding:3px 1px 3px!important;
-}
-#page-cultivation .home-identity strong{font-size:17px!important}
-#page-cultivation .home-sub{font-size:9px!important}
-#page-cultivation .progress-card{
-  padding:7px!important;
-  margin-top:4px!important;
-}
-#page-cultivation .bar{
-  height:5px!important;
-  margin:4px 0 5px!important;
-}
-.breakthrough-details{
-  margin:3px 0 5px;
-  border:1px solid #2b2b25;
-  border-radius:8px;
-  background:#0d0e0c;
-}
-.breakthrough-details summary{
-  list-style:none;
-  cursor:pointer;
-  padding:6px 8px;
-  font-size:11px;
-  color:#d7c08b;
-}
-.breakthrough-details summary::-webkit-details-marker{display:none}
-.breakthrough-details summary:after{
-  content:"展開";
-  float:right;
-  color:#77705f;
-  font-size:9px;
-}
-.breakthrough-details[open] summary:after{content:"收合"}
-.breakthrough-details .breakthrough-panel{
-  border:0!important;
-  margin:0!important;
-  padding:0 7px 7px!important;
-  background:transparent!important;
-}
-#page-cultivation #breakthroughBtn{
-  min-height:35px!important;
-  margin-top:4px!important;
-  font-size:13px!important;
-}
-#page-cultivation .cultivation-card{
-  padding:7px!important;
-  margin-top:5px!important;
-}
-#page-cultivation .home-tip{display:none!important}
-#page-cultivation .choice-grid{gap:4px!important}
-#page-cultivation .mode-btn{
-  min-height:40px!important;
-  padding:5px!important;
-}
-#page-cultivation .mode-btn strong{font-size:11px!important}
-#page-cultivation .mode-btn small{font-size:8px!important}
-#page-cultivation .log-card{display:none!important}
-
-.bottom-nav{
-  position:relative!important;
-  inset:auto!important;
-  transform:none!important;
-  width:100%!important;
-  min-width:0!important;
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:0!important;
-  padding:3px 4px max(4px,var(--app-safe-bottom))!important;
-  overflow:hidden!important;
-  background:#070807!important;
-  border-top:1px solid #2f2d25!important;
-}
-.bottom-nav .nav-btn{
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  min-width:0!important;
-  width:100%!important;
-  min-height:48px!important;
-  padding:2px 0!important;
-  margin:0!important;
-  font-size:9px!important;
-  overflow:hidden!important;
-}
-.bottom-nav .nav-btn span{
-  font-size:15px!important;
-  line-height:1!important;
-  margin:0 0 2px!important;
-}
-
-/* other pages may scroll internally, but the whole browser page will not */
-#page-adventure,#page-cave,#page-character{
-  overflow-y:auto!important;
-  padding-bottom:8px!important;
-}
-
-@media (max-height:760px){
-  .topbar{min-height:44px!important}
-  .topbar h1{font-size:20px!important}
-  .mobile-status{margin-bottom:2px!important}
-  #page-cultivation .home-identity{padding-top:1px!important}
-  #page-cultivation .progress-card{margin-top:2px!important}
-  #page-cultivation .cultivation-card{margin-top:3px!important}
-}
-
-/* V0.8.2：所有頁面固定一屏，任何頁面都不使用垂直捲動 */
-html,body,#app,.game-shell{
-  height:100dvh!important;
-  max-height:100dvh!important;
-  overflow:hidden!important;
-}
-.game-shell{
-  display:grid!important;
-  grid-template-rows:auto auto minmax(0,1fr) auto!important;
-}
-.page{
-  min-height:0!important;
-  height:100%!important;
-  overflow:hidden!important;
-  padding:0 7px 4px!important;
-}
-#page-cultivation,#page-adventure,#page-cave,#page-character{
-  overflow:hidden!important;
-  min-height:0!important;
-  max-height:100%!important;
-}
-
-/* 歷練：地點縮成格狀，不形成長清單 */
-#page-adventure .adventure-grid,
-#page-adventure .location-grid,
-#page-adventure .stage-grid{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:5px!important;
-}
-#page-adventure .card{padding:7px!important;margin-bottom:5px!important}
-#page-adventure button{min-height:34px!important;padding:4px 6px!important}
-#page-adventure .log-list{max-height:58px!important;overflow:hidden!important}
-
-/* 洞府：卡片壓縮 */
-#page-cave{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  align-content:start!important;
-  gap:5px!important;
-}
-#page-cave>.card{
-  margin:0!important;
-  padding:7px!important;
-  min-width:0!important;
-}
-#page-cave>.card:first-child{grid-column:1/-1}
-#page-cave h2,#page-cave h3{margin:0 0 4px!important;font-size:14px!important}
-#page-cave p{margin:2px 0!important;font-size:9px!important}
-
-/* 角色：資料固定在一屏，裝備/屬性採緊湊格狀 */
-#page-character .card{padding:7px!important;margin-bottom:5px!important}
-#page-character .rename-box{padding:6px!important;margin:4px 0 6px!important}
-#page-character .rename-row input{padding:5px 7px!important;font-size:14px!important;height:34px!important}
-#page-character .rename-row button{min-height:34px!important}
-#page-character .character-grid{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:4px!important;
-}
-#page-character .character-grid>div{padding:5px!important}
-#page-character .equipment-grid,
-#page-character .inventory-grid{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:4px!important;
-}
-#page-character .equipment-grid>*,#page-character .inventory-grid>*{
-  min-width:0!important;
-  padding:5px!important;
-  font-size:9px!important;
-}
-
-/* 小螢幕再壓一級，仍維持無捲動 */
-@media (max-height:760px){
-  .page{font-size:11px!important}
-  .card{border-radius:8px!important}
-  #page-adventure .card,#page-character .card,#page-cave>.card{padding:5px!important}
-  #page-character .rename-box{padding:4px!important}
-}
-@media (max-height:680px){
-  .topbar .eyebrow{display:none!important}
-  .mobile-status span{display:none!important}
-  .bottom-nav .nav-btn{min-height:42px!important}
-}
-
-/* V0.8.3 修正：單屏 = 頁面切換，不是裁切內容 */
-html,body,#app,.game-shell{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
-.game-shell{display:grid!important;grid-template-rows:auto auto minmax(0,1fr) auto!important}
-.page{
-  display:none!important;
-  height:100%!important;min-height:0!important;max-height:none!important;
-  overflow:hidden!important;padding:0 8px 5px!important;
-}
-.page.active{display:block!important}
-
-/* 每頁內容必須在自己的可視區內，禁止用 overflow 把文字切掉 */
-#page-cultivation,#page-adventure,#page-cave,#page-character{
-  overflow:hidden!important;
-  position:relative!important;
-}
-
-/* 修煉 */
-#page-cultivation .progress-card,#page-cultivation .cultivation-card{padding:6px!important;margin:3px 0!important}
-#page-cultivation .breakthrough-details{margin:3px 0!important}
-#page-cultivation .mode-btn{min-height:38px!important}
-
-/* 歷練：保留真正可點擊的區域，卡片縮小而非遮掉 */
-#page-adventure .card{padding:6px!important;margin:3px 0!important}
-#page-adventure .adventure-grid,
-#page-adventure .location-grid,
-#page-adventure .stage-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
-#page-adventure button{pointer-events:auto!important;min-height:32px!important;padding:4px!important;font-size:10px!important}
-#page-adventure .log-card{max-height:80px!important;overflow:hidden!important}
-
-/* 洞府：恢復正常 block 流，避免之前 grid 規則破壞按鈕 */
-#page-cave{display:none!important}
-#page-cave.active{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:min-content!important;align-content:start!important;gap:4px!important}
-#page-cave>.card{display:block!important;padding:6px!important;margin:0!important;min-width:0!important;overflow:visible!important}
-#page-cave button{pointer-events:auto!important;min-height:32px!important;padding:4px!important;font-size:10px!important}
-
-/* 角色：完整顯示，不再只剩上半部 */
-#page-character{display:none!important}
-#page-character.active{display:grid!important;grid-template-rows:auto minmax(0,1fr)!important;gap:4px!important}
-#page-character>.card{padding:6px!important;margin:0!important;overflow:hidden!important}
-#page-character .rename-box{padding:5px!important;margin:3px 0 5px!important}
-#page-character .character-grid{
- display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important
-}
-#page-character .character-grid>div{padding:4px!important;font-size:9px!important}
-#page-character .character-grid strong{font-size:12px!important}
-#page-character .equipment-grid,#page-character .inventory-grid{
- display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:3px!important
-}
-#page-character .equipment-grid>*,#page-character .inventory-grid>*{padding:4px!important;font-size:8px!important}
-
-/* 字不能被裁切：允許卡片文字正常換行 */
-.card,.card *{text-overflow:clip}
-.card p,.card small,.card .muted{white-space:normal!important;overflow:visible!important}
-
-/* 導航永遠在最上層且可操作 */
-.bottom-nav{z-index:100!important;position:relative!important}
-.bottom-nav .nav-btn{pointer-events:auto!important;position:relative!important;z-index:101!important}
-
-@media(max-height:760px){
- .topbar{padding-top:5px!important}
- .topbar h1{font-size:19px!important}
- .mobile-status{margin-bottom:2px!important}
- #page-character .character-grid>div{padding:3px!important}
-}
-
-/* ===== V0.9 全頁單屏重新設計 ===== */
-html,body{height:100%;margin:0;overflow:hidden!important}
-body{position:fixed;inset:0}
-.game-shell{
-  width:min(100%,480px)!important;
-  height:100dvh!important;
-  max-height:100dvh!important;
-  margin:0 auto!important;
-  padding:0!important;
-  display:grid!important;
-  grid-template-rows:auto auto minmax(0,1fr) auto!important;
-  overflow:hidden!important;
-}
-.page{
-  display:none!important;
-  min-height:0!important;
-  height:100%!important;
-  overflow:hidden!important;
-  padding:0 8px 6px!important;
-}
-.page.active{display:block!important}
-
-.compact-head{
-  height:34px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:2px 2px 4px;
-}
-.compact-head>div:first-child{display:flex;align-items:baseline;gap:8px}
-.compact-head strong{font-size:15px}
-.compact-head small{font-size:10px;color:#c7ac6a}
-.pager{display:flex;align-items:center;gap:6px;font-size:10px;color:#c7ac6a}
-.mini-btn{
-  border:1px solid #6f603a;
-  background:#11120f;
-  color:#eadcb4;
-  border-radius:7px;
-  min-width:30px;
-  min-height:28px;
-  padding:2px 7px;
-  font-size:11px;
-}
-.mini-btn:disabled{opacity:.28}
-
-.subtabs{
-  height:36px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:4px;
-  margin:0 0 5px;
-}
-.subtab{
-  border:1px solid #3a372b;
-  background:#0d0e0c;
-  color:#8f8772;
-  border-radius:8px;
-  font-size:11px;
-}
-.subtab.active{color:#ead7a0;border-color:#8a7341;background:#17150f}
-
-.cave-panel{display:none;height:calc(100% - 41px);overflow:hidden}
-.cave-panel.active{display:block!important}
-
-.battle-strip{
-  height:78px;
-  border:1px solid #343129;
-  border-radius:9px;
-  padding:6px 8px;
-  background:#0d0e0c;
-  margin-bottom:5px;
-}
-.battle-strip-head{display:flex;justify-content:space-between;font-size:10px;color:#c7ac6a}
-.battle-log-compact{
-  margin-top:4px;
-  font-size:9px;
-  line-height:1.35;
-  color:#cfc7b4;
-  height:45px;
-  overflow:hidden;
-  white-space:pre-line;
-}
-
-.zone-grid-fixed{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:repeat(2,minmax(0,1fr))!important;
-  gap:5px!important;
-  height:calc(100% - 117px)!important;
-}
-.zone-grid-fixed .zone-card{
-  min-height:0!important;
-  height:auto!important;
-  padding:7px!important;
-  margin:0!important;
-  overflow:hidden!important;
-}
-.zone-card h3{font-size:13px!important;margin:0 0 2px!important}
-.zone-card p{
-  font-size:8px!important;
-  line-height:1.25!important;
-  height:20px!important;
-  overflow:hidden!important;
-}
-.zone-level{font-size:8px!important;margin-top:2px!important}
-.zone-actions{margin-top:4px!important;gap:4px!important}
-.zone-btn{min-height:27px!important;font-size:9px!important;padding:2px!important}
-.boss-line{font-size:8px!important;padding:3px 4px!important;margin-top:3px!important}
-
-.fixed-grid{
-  display:grid!important;
-  gap:5px!important;
-  min-height:0!important;
-  overflow:hidden!important;
-}
-.six-grid{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:repeat(3,minmax(0,1fr))!important;
-  height:calc(100% - 34px)!important;
-}
-.alchemy-grid{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:repeat(2,minmax(0,1fr))!important;
-  height:calc(100% - 34px)!important;
-}
-.equip-grid{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:repeat(2,minmax(0,1fr))!important;
-  height:calc(100% - 112px)!important;
-}
-.skill-grid{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:repeat(2,minmax(0,1fr))!important;
-  height:calc(100% - 34px)!important;
-}
-.fixed-grid .item-row,.fixed-grid .recipe-row,.fixed-grid .equip-row,.fixed-grid .skill-row{
-  min-height:0!important;
-  height:auto!important;
-  padding:7px!important;
-  margin:0!important;
-  overflow:hidden!important;
-  display:flex!important;
-  flex-direction:column!important;
-  gap:3px!important;
-}
-.fixed-grid b{font-size:11px!important}
-.fixed-grid small{font-size:8px!important;line-height:1.25!important;overflow:hidden!important}
-.fixed-grid button{min-height:26px!important;font-size:9px!important;padding:2px 5px!important}
-.item-actions{margin-top:auto!important}
-
-.compact-slots{
-  height:45px!important;
-  display:grid!important;
-  grid-template-columns:repeat(3,1fr)!important;
-  gap:4px!important;
-  margin:0 0 4px!important;
-}
-.compact-slots .slot{padding:4px!important;overflow:hidden!important}
-.compact-slots .slot span{font-size:8px!important}
-.compact-slots .slot strong{font-size:9px!important}
-.equipment-pager{height:28px;justify-content:center;margin-bottom:3px}
-
-.dev-inline{font-size:9px}
-.dev-inline summary{color:#8f8772}
-.dev-inline[open]{position:absolute;right:8px;z-index:20;background:#11120f;border:1px solid #403928;border-radius:7px;padding:4px}
-
-.character-fixed{height:100%;display:grid;grid-template-rows:42px auto minmax(0,1fr);gap:5px}
-.character-header{display:flex;align-items:center;justify-content:space-between}
-.character-header>div{display:flex;align-items:center;gap:7px}
-.character-header strong{font-size:18px}
-.rename-compact{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 54px 54px;
-  gap:5px;
-  height:35px;
-}
-.rename-compact.hidden{display:none!important}
-.rename-compact input{
-  min-width:0;
-  height:32px;
-  border:1px solid #514a36;
-  border-radius:7px;
-  background:#090a08;
-  color:#f0e5c6;
-  padding:4px 7px;
-  font-size:14px;
-}
-.character-grid-fixed{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  grid-template-rows:repeat(4,minmax(0,1fr))!important;
-  gap:5px!important;
-  min-height:0!important;
-}
-.character-grid-fixed>div{
-  border:1px solid #333128;
-  border-radius:8px;
-  background:#0d0e0c;
-  padding:7px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.character-grid-fixed span{font-size:9px;color:#99917f}
-.character-grid-fixed strong{font-size:13px;margin-top:2px}
-
-.bottom-nav{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  min-height:54px!important;
-  width:100%!important;
-  position:relative!important;
-  z-index:100!important;
-}
-.bottom-nav .nav-btn{pointer-events:auto!important;min-height:50px!important}
-
-@media(max-height:720px){
-  .topbar{min-height:42px!important}
-  .topbar h1{font-size:18px!important}
-  .mobile-status{margin-bottom:1px!important}
-  .bottom-nav{min-height:48px!important}
-  .bottom-nav .nav-btn{min-height:45px!important}
-}
-
-
-/* ===== V10 老人友善大字版：不縮字，內容不足改分頁 ===== */
-:root{font-size:18px}
-.topbar{min-height:64px!important;padding:10px 12px 6px!important}
-.topbar .eyebrow{font-size:14px!important;letter-spacing:.10em!important}
-.topbar h1{font-size:30px!important;line-height:1.05!important;letter-spacing:.08em!important}
-.version,.ghost-btn{font-size:16px!important;min-height:42px!important;padding:7px 12px!important}
-.mobile-status{margin:3px 8px 7px!important;gap:5px!important}
-.mobile-status>div{padding:6px 3px!important}
-.mobile-status span{font-size:13px!important}.mobile-status strong{font-size:16px!important}
-.page{padding:0 8px 7px!important}
-.compact-head{height:46px!important}.compact-head strong{font-size:20px!important}.compact-head small,.pager{font-size:15px!important}
-.mini-btn{min-width:40px!important;min-height:38px!important;font-size:18px!important}
-.subtabs{height:46px!important;gap:5px!important}.subtab{font-size:17px!important}
-.battle-strip{height:104px!important;padding:8px 10px!important}.battle-strip-head{font-size:15px!important}.battle-log-compact{font-size:14px!important;line-height:1.4!important;height:68px!important}
-.zone-grid-fixed{grid-template-columns:1fr!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 155px)!important;gap:7px!important}
-.zone-grid-fixed .zone-card{padding:10px!important}.zone-card h3{font-size:20px!important}.zone-card p{font-size:15px!important;line-height:1.35!important;height:auto!important;max-height:42px!important}.zone-level{font-size:14px!important}.zone-btn{min-height:38px!important;font-size:17px!important}.boss-line{font-size:14px!important;padding:5px 7px!important}
-.six-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 46px)!important}
-.alchemy-grid,.equip-grid,.skill-grid{grid-template-columns:1fr!important;grid-template-rows:repeat(2,minmax(0,1fr))!important}
-.alchemy-grid,.skill-grid{height:calc(100% - 46px)!important}.equip-grid{height:calc(100% - 128px)!important}
-.fixed-grid .item-row,.fixed-grid .recipe-row,.fixed-grid .equip-row,.fixed-grid .skill-row{padding:10px!important;gap:6px!important}
-.fixed-grid b{font-size:18px!important}.fixed-grid small{font-size:15px!important;line-height:1.35!important}.fixed-grid button{min-height:38px!important;font-size:17px!important}
-.compact-slots{height:58px!important}.compact-slots .slot{padding:6px!important}.compact-slots .slot span{font-size:13px!important}.compact-slots .slot strong{font-size:15px!important}
-.character-fixed{grid-template-rows:50px auto minmax(0,1fr)!important}.character-header strong{font-size:23px!important}.character-grid-fixed{gap:7px!important}.character-grid-fixed>div{padding:8px!important}.character-grid-fixed span{font-size:15px!important}.character-grid-fixed strong{font-size:19px!important}
-.rename-compact{height:44px!important;grid-template-columns:minmax(0,1fr) 64px 64px!important}.rename-compact input{height:42px!important;font-size:18px!important}.rename-compact button{font-size:16px!important}
-.bottom-nav{min-height:70px!important;padding:4px 4px max(5px,env(safe-area-inset-bottom))!important}.bottom-nav .nav-btn{min-height:62px!important;font-size:16px!important}.bottom-nav .nav-btn span{font-size:25px!important}
-.muted{font-size:15px!important}.section-title>span{font-size:19px!important}.section-title>strong{font-size:17px!important}
-@media(max-height:760px){.topbar{min-height:56px!important}.topbar h1{font-size:25px!important}.bottom-nav{min-height:62px!important}.bottom-nav .nav-btn{min-height:54px!important}.mobile-status span{font-size:12px!important}.mobile-status strong{font-size:15px!important}}
-
-/* ===== V11 全頁面老人友善大字版 ===== */
-
-/* 全域字級基準 */
-html, body {
-  font-size: 18px !important;
-}
-body, button, input, select, textarea {
-  font-size: 18px !important;
-}
-button, input, select, textarea {
-  min-height: 44px !important;
-}
-
-/* 頂部標題 */
-.topbar .eyebrow {
-  font-size: 16px !important;
-}
-.topbar h1 {
-  font-size: 34px !important;
-  line-height: 1.1 !important;
-}
-.version, .ghost-btn {
-  font-size: 18px !important;
-  min-height: 44px !important;
-  padding: 8px 14px !important;
-}
-
-/* 四格狀態 */
-.mobile-status span {
-  font-size: 15px !important;
-}
-.mobile-status strong {
-  font-size: 21px !important;
-}
-.mobile-status > div {
-  min-height: 62px !important;
-  padding: 9px 6px !important;
-}
-
-/* 一般標題與數值 */
-.section-title > span,
-.compact-head strong,
-.character-header strong {
-  font-size: 24px !important;
-}
-.section-title > strong,
-.compact-head small,
-.character-grid-fixed strong {
-  font-size: 20px !important;
-}
-.muted,
-.compact-help,
-.home-tip,
-.row-copy small,
-.recipe-copy small,
-.zone-card p,
-.battle-log-compact,
-.character-grid-fixed span {
-  font-size: 17px !important;
-  line-height: 1.5 !important;
-}
-
-/* 主修煉頁 */
-.home-identity strong {
-  font-size: 28px !important;
-}
-.home-identity .tag {
-  font-size: 18px !important;
-  padding: 6px 11px !important;
-}
-.home-sub {
-  font-size: 18px !important;
-}
-.home-sub b {
-  font-size: 20px !important;
-}
-.breakthrough-details summary {
-  font-size: 19px !important;
-  padding: 11px 13px !important;
-}
-.breakthrough-row {
-  font-size: 19px !important;
-}
-.small-grid span {
-  font-size: 15px !important;
-}
-.small-grid strong {
-  font-size: 19px !important;
-}
-#breakthroughBtn {
-  font-size: 22px !important;
-  min-height: 56px !important;
-}
-#usePillBtn {
-  font-size: 18px !important;
-  min-height: 44px !important;
-}
-.mode-btn strong {
-  font-size: 22px !important;
-}
-.mode-btn small {
-  font-size: 17px !important;
-}
-.mode-btn {
-  min-height: 72px !important;
-  padding: 12px !important;
-}
-
-/* 歷練頁 */
-.battle-strip-head {
-  font-size: 18px !important;
-}
-.battle-log-compact {
-  font-size: 17px !important;
-}
-.zone-card h3 {
-  font-size: 22px !important;
-}
-.zone-card p {
-  font-size: 17px !important;
-  line-height: 1.45 !important;
-}
-.zone-level {
-  font-size: 16px !important;
-}
-.zone-btn {
-  font-size: 18px !important;
-  min-height: 44px !important;
-}
-.boss-line {
-  font-size: 16px !important;
-}
-
-/* 洞府四頁籤 */
-.subtab {
-  font-size: 19px !important;
-  min-height: 48px !important;
-}
-.fixed-grid b,
-.row-copy b,
-.recipe-copy b {
-  font-size: 20px !important;
-}
-.fixed-grid small,
-.row-copy small,
-.recipe-copy small {
-  font-size: 16px !important;
-  line-height: 1.45 !important;
-}
-.fixed-grid button,
-.equip-btn,
-.skill-btn,
-.skill-upgrade-btn,
-.recipe-btn,
-.item-use-btn {
-  font-size: 17px !important;
-  min-height: 42px !important;
-}
-
-/* 背包數量、裝備槽 */
-.item-actions strong {
-  font-size: 19px !important;
-}
-.compact-slots .slot span {
-  font-size: 15px !important;
-}
-.compact-slots .slot strong {
-  font-size: 18px !important;
-}
-
-/* 角色頁 */
-.character-header .tag {
-  font-size: 18px !important;
-}
-.character-grid-fixed span {
-  font-size: 16px !important;
-}
-.character-grid-fixed strong {
-  font-size: 21px !important;
-}
-.rename-compact input {
-  font-size: 20px !important;
-  min-height: 46px !important;
-}
-.rename-compact .mini-btn {
-  font-size: 18px !important;
-  min-height: 44px !important;
-}
-
-/* 翻頁與小按鈕 */
-.pager {
-  font-size: 18px !important;
-}
-.mini-btn {
-  font-size: 18px !important;
-  min-width: 42px !important;
-  min-height: 40px !important;
-}
-
-/* 底部導航 */
-.bottom-nav {
-  min-height: 78px !important;
-}
-.bottom-nav .nav-btn {
-  font-size: 18px !important;
-  min-height: 64px !important;
-}
-.bottom-nav .nav-btn span {
-  font-size: 26px !important;
-}
-
-/* 測試區 */
-.dev-inline, .dev-box {
-  font-size: 16px !important;
-}
-
-/* 手機小高度：只縮間距，不縮字 */
-@media (max-height: 760px) {
-  .topbar { padding-top: 6px !important; }
-  .mobile-status { margin-bottom: 4px !important; }
-  .card { margin-top: 5px !important; }
-  .page { padding-left: 7px !important; padding-right: 7px !important; }
-}
-
-/* ===== V12 洞府全寬重構 + 無體力限制 + 動態戰鬥 ===== */
-
-/* 洞府：頁籤在上、內容吃滿寬度 */
-#cavePage .compact-tabs,
-#cavePage .subtabs,
-.cave-tabs {
-  display:grid !important;
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-  gap:8px !important;
-  width:100% !important;
-  margin-bottom:10px !important;
-}
-#cavePage .subtab,
-.cave-tabs button {
-  width:100% !important;
-  min-width:0 !important;
-  min-height:50px !important;
-  font-size:18px !important;
-  padding:8px 4px !important;
-}
-#cavePage .cave-body,
-#cavePage .subpage,
-#cavePage .tab-content,
-#cavePage .compact-panel,
-#cavePage .fixed-panel {
-  width:100% !important;
-  max-width:none !important;
-  margin-left:0 !important;
-}
-#cavePage .fixed-grid,
-#cavePage .item-grid,
-#cavePage .recipe-grid,
-#cavePage .equipment-grid,
-#cavePage .skill-grid {
-  width:100% !important;
-  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-  gap:10px !important;
-}
-#cavePage .fixed-grid > *,
-#cavePage .item-grid > *,
-#cavePage .recipe-grid > *,
-#cavePage .equipment-grid > *,
-#cavePage .skill-grid > * {
-  min-width:0 !important;
-  width:auto !important;
-}
-#cavePage h2, #cavePage h3 { font-size:24px !important; }
-#cavePage p, #cavePage small { overflow-wrap:anywhere; }
-
-/* 戰鬥面板 */
-.v12-battle-live{
-  border:1px solid rgba(201,169,86,.45);
-  border-radius:16px;
-  padding:12px;
-  margin:10px 0;
-  background:rgba(8,9,7,.92);
-}
-.v12-fighter{margin:8px 0 12px}
-.v12-fighter-head{display:flex;justify-content:space-between;gap:8px;font-size:19px;font-weight:700}
-.v12-hp{height:14px;border-radius:999px;background:#24251f;overflow:hidden;margin-top:6px}
-.v12-hp>i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#8c2d28,#d26955);transition:width .45s ease}
-.v12-player .v12-hp>i{background:linear-gradient(90deg,#8a7336,#d4bd72)}
-.v12-roundlog{font-size:17px;line-height:1.5;min-height:76px;max-height:116px;overflow:hidden}
-.v12-roundlog div{margin:3px 0}
-.v12-battle-note{font-size:16px;color:#b9ae8e;margin-top:6px}
-
-/* ===== V13 洞府真正全寬修正 ===== */
-#page-cave{display:none!important;width:100%!important;height:100%!important;overflow:hidden!important;padding:0 10px 6px!important}
-#page-cave.active{display:block!important}
-#page-cave .cave-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;width:100%!important;height:52px!important;margin:0 0 8px!important}
-#page-cave .subtab{width:100%!important;min-width:0!important;min-height:48px!important;font-size:19px!important;padding:6px 2px!important}
-#page-cave .cave-panel{display:none!important;width:100%!important;height:calc(100% - 60px)!important;overflow:hidden!important;margin:0!important;padding:0!important}
-#page-cave .cave-panel.active{display:block!important}
-#page-cave .compact-head{width:100%!important;height:46px!important;padding:2px 2px 7px!important}
-#page-cave .compact-head strong{font-size:24px!important}
-#page-cave .compact-head small{font-size:18px!important}
-#page-cave .fixed-grid{width:100%!important;max-width:none!important;margin:0!important}
-#page-cave .six-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,minmax(0,1fr))!important;height:calc(100% - 46px)!important}
-#page-cave .alchemy-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;height:calc(100% - 46px)!important}
-#page-cave .equip-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 126px)!important}
-#page-cave .skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 46px)!important}
-#page-cave .fixed-grid>*{min-width:0!important;width:auto!important}
-#page-cave .row-copy,#page-cave .recipe-copy{width:100%!important;min-width:0!important}
-#page-cave .row-copy b,#page-cave .recipe-copy b{font-size:20px!important;white-space:normal!important}
-#page-cave .row-copy small,#page-cave .recipe-copy small{font-size:17px!important;line-height:1.4!important;white-space:normal!important;overflow-wrap:anywhere!important}
-
-/* ===== V13 真正回合戰鬥 ===== */
-.v13-battle{border:1px solid #64552e;border-radius:14px;padding:10px;background:#0c0d0b;height:100%;box-sizing:border-box}
-.v13-battle-row{margin-bottom:9px}
-.v13-battle-head{display:flex;justify-content:space-between;gap:8px;font-size:18px;font-weight:700}
-.v13-hp{height:13px;border-radius:999px;overflow:hidden;background:#292923;margin-top:5px}
-.v13-hp i{display:block;height:100%;width:100%;transition:width .45s ease}
-.v13-player .v13-hp i{background:linear-gradient(90deg,#8b7436,#d4ba6a)}
-.v13-enemy .v13-hp i{background:linear-gradient(90deg,#7f2824,#ce6654)}
-.v13-turns{font-size:16px;line-height:1.45;height:70px;overflow:hidden;margin-top:7px;color:#d8cfbb}
-.v13-turns div{margin:2px 0}
-
-/* ===== V14 歷練與戰鬥資訊修正 ===== */
-
-/* ×1 / ×3 按鈕明顯放大 */
-#page-adventure .zone-actions{
-  gap:10px!important;
-}
-#page-adventure .zone-btn{
-  min-height:58px!important;
-  font-size:26px!important;
-  font-weight:800!important;
-  letter-spacing:.04em!important;
-  border-radius:14px!important;
-}
-#page-adventure .boss-btn{
-  min-height:58px!important;
-  font-size:23px!important;
-  font-weight:800!important;
-}
-
-/* 地圖卡片不再顯示勝場/體力資訊後，留更多空間給副本名稱與說明 */
-#page-adventure .zone-card{
-  padding:14px!important;
-}
-#page-adventure .zone-card h3{
-  font-size:25px!important;
-  margin-bottom:8px!important;
-}
-#page-adventure .zone-card p{
-  font-size:18px!important;
-  line-height:1.45!important;
-  height:auto!important;
-  min-height:52px!important;
-}
-
-/* 戰鬥區擴大，文字要看得到 */
-.battle-strip{
-  height:210px!important;
-  min-height:210px!important;
-  padding:12px!important;
-}
-.battle-log-compact{
-  height:165px!important;
-  max-height:165px!important;
-  overflow:hidden!important;
-}
-.v14-battle{
-  height:100%;
-  display:grid;
-  grid-template-rows:auto auto minmax(0,1fr);
-  gap:10px;
-}
-.v14-row{
-  border:1px solid #343129;
-  border-radius:12px;
-  padding:9px 10px;
-  background:#0c0d0b;
-}
-.v14-head{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  font-size:20px;
-  font-weight:800;
-}
-.v14-stats{
-  margin-top:4px;
-  font-size:16px;
-  color:#b9ae8e;
-}
-.v14-hp{
-  height:14px;
-  border-radius:999px;
-  background:#282821;
-  overflow:hidden;
-  margin-top:6px;
-}
-.v14-hp i{
-  display:block;
-  height:100%;
-  width:100%;
-  transition:width .45s ease;
-}
-.v14-enemy .v14-hp i{background:linear-gradient(90deg,#7e2b27,#d46854)}
-.v14-player .v14-hp i{background:linear-gradient(90deg,#8b7436,#d6bd70)}
-
-.v14-action{
-  border:1px solid #50452c;
-  border-radius:12px;
-  padding:9px 10px;
-  background:#11120f;
-  min-height:70px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.v14-action .main{
-  font-size:20px;
-  line-height:1.4;
-  color:#efe4c5;
-}
-.v14-action .sub{
-  margin-top:4px;
-  font-size:16px;
-  line-height:1.35;
-  color:#b8ad91;
-}
-.v14-action .dmg{color:#e6bf68;font-weight:800}
-.v14-action .hurt{color:#e17a68;font-weight:800}
-.v14-action .def{color:#8cb4c8;font-weight:800}
-.v14-action .round{color:#9b927b}
-
-/* 讓戰鬥卡片在單屏內維持兩張副本卡 */
-.zone-grid-fixed{
-  height:calc(100% - 260px)!important;
-  grid-template-rows:repeat(2,minmax(0,1fr))!important;
-}
-
-/* 若螢幕較矮，稍微壓縮，但不縮字 */
-@media(max-height:760px){
-  .battle-strip{height:190px!important;min-height:190px!important}
-  .battle-log-compact{height:145px!important;max-height:145px!important}
-  .zone-grid-fixed{height:calc(100% - 240px)!important}
-  #page-adventure .zone-btn{min-height:54px!important}
-}
-
-/* ===== V15 字級統一 + 境界完整顯示 + 歷練次數修正 ===== */
-
-/* 全域字級階層：避免同一頁忽大忽小 */
-:root{
-  --fs-caption:16px;
+  --bg:#050505;
+  --panel:#0a0a09;
+  --panel2:#11110f;
+  --line:#77756d;
+  --line-soft:#373730;
+  --text:#f2eee3;
+  --muted:#aaa596;
+  --gold:#c7a95e;
+  --danger:#cb6356;
+  --green:#7fb77b;
+  --fs-small:16px;
   --fs-body:18px;
-  --fs-body-strong:20px;
+  --fs-strong:20px;
   --fs-section:24px;
   --fs-title:34px;
 }
-body,button,input,select,textarea{font-size:var(--fs-body)!important}
-.topbar .eyebrow{font-size:var(--fs-caption)!important}
-.topbar h1{font-size:var(--fs-title)!important}
-.version,.ghost-btn,.subtab,.mini-btn,.zone-btn,.boss-btn{font-size:var(--fs-body)!important}
 
-.mobile-status span,
-.character-grid-fixed span,
-.small-grid span,
-.zone-level,
-.v14-stats{font-size:var(--fs-caption)!important}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#000;color:var(--text);font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;overflow:hidden}
+body{position:fixed;inset:0}
+button,input{font:inherit}
+button{cursor:pointer}
 
-.mobile-status strong,
-.character-grid-fixed strong,
-.small-grid strong,
-.row-copy b,
-.recipe-copy b,
-.fixed-grid b,
-.zone-card h3,
-.mode-btn strong{font-size:var(--fs-body-strong)!important}
-
-.section-title>span,
-.compact-head strong,
-.character-header strong{font-size:var(--fs-section)!important}
-
-.muted,.compact-help,.home-tip,.row-copy small,.recipe-copy small,
-.fixed-grid small,.zone-card p,.battle-log-compact,.v14-action .sub{
-  font-size:var(--fs-body)!important;
-  line-height:1.45!important;
+.game-shell{
+  width:min(100vw,480px);
+  height:100dvh;
+  margin:0 auto;
+  background:
+    radial-gradient(circle at 50% 6%,rgba(255,255,255,.05),transparent 24%),
+    linear-gradient(#0a0a09 0,#050505 34%,#020202 100%);
+  display:grid;
+  grid-template-rows:auto auto minmax(0,1fr) auto;
+  overflow:hidden;
+  border-left:1px solid #111;
+  border-right:1px solid #111;
 }
 
-/* 境界格完整顯示：不省略、不出現「築基中…」 */
-.mobile-status>div:first-child{
-  min-width:0!important;
-  overflow:visible!important;
+.topbar{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:10px 14px 6px;
 }
-.mobile-status>div:first-child strong,
-#mRealm{
-  white-space:normal!important;
-  overflow:visible!important;
-  text-overflow:clip!important;
-  word-break:keep-all!important;
-  line-height:1.15!important;
-  min-height:46px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-size:20px!important;
+.eyebrow{font-size:var(--fs-small);color:var(--muted);letter-spacing:.09em}
+h1{margin:2px 0 0;font-size:var(--fs-title);line-height:1;letter-spacing:.08em}
+.top-actions{display:flex;gap:8px;align-items:center}
+.version,.ghost-btn,.pager-btn{
+  border:1px solid var(--gold);background:#090907;color:var(--gold);
+  border-radius:12px;min-width:50px;min-height:44px;padding:6px 10px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:var(--fs-body)
 }
+.ghost-btn{color:var(--muted);border-color:var(--line-soft)}
 
-/* 四格狀態高度統一，給境界兩行空間 */
-.mobile-status>div{
-  min-height:76px!important;
-  display:flex!important;
-  flex-direction:column!important;
-  justify-content:center!important;
-}
-
-/* 歷練：每頁固定 2 個副本，按鈕固定顯示在卡片底部 */
-.zone-grid-fixed{
-  grid-template-columns:1fr!important;
-  grid-template-rows:repeat(2,minmax(0,1fr))!important;
-  gap:10px!important;
-}
-#page-adventure .zone-card{
-  position:relative!important;
-  display:grid!important;
-  grid-template-rows:auto auto 1fr auto!important;
-  min-height:0!important;
-  overflow:hidden!important;
-}
-#page-adventure .zone-card p{
-  min-height:0!important;
-  height:auto!important;
-  margin-bottom:6px!important;
-}
-#page-adventure .zone-actions{
-  display:grid!important;
-  grid-template-columns:1fr 1fr!important;
-  gap:10px!important;
-  margin-top:8px!important;
-  align-self:end!important;
-}
-#page-adventure .zone-btn{
-  min-height:56px!important;
-  font-size:20px!important;
-  font-weight:800!important;
-}
-#page-adventure .zone-btn[data-runs="1"]::after{
-  content:" 挑戰 1 次";
-}
-#page-adventure .zone-btn[data-runs="3"]::after{
-  content:" 連戰 3 次";
-}
-/* 隱藏原本 ×1 / ×3 文字，改由 ::after 顯示完整文字 */
-#page-adventure .zone-btn[data-runs="1"],
-#page-adventure .zone-btn[data-runs="3"]{
-  color:transparent!important;
-  position:relative!important;
-}
-#page-adventure .zone-btn[data-runs="1"]::after,
-#page-adventure .zone-btn[data-runs="3"]::after{
-  color:#ead7a0!important;
-  position:absolute!important;
-  inset:0!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-size:20px!important;
-  font-weight:800!important;
-}
-
-/* 戰鬥資訊字級也統一 */
-.v14-battle-head{font-size:20px!important}
-.v14-action .main{font-size:20px!important}
-.v14-action .sub{font-size:18px!important}
-
-/* 底部導航統一 */
-.bottom-nav .nav-btn{font-size:18px!important}
-.bottom-nav .nav-btn span{font-size:26px!important}
-
-/* 小螢幕只縮間距，不縮字 */
-@media(max-height:760px){
-  .mobile-status>div{min-height:72px!important}
-  #page-adventure .zone-btn{min-height:52px!important}
-}
-
-/* ===== V16：實機版面壓縮 + 字級統一 ===== */
-:root{
-  --v16-small:17px;
-  --v16-body:20px;
-  --v16-strong:22px;
-  --v16-section:25px;
-  --v16-title:34px;
-}
-
-/* 統一所有一般文字，不允許頁內任意縮小 */
-body, button, input, select, textarea,
-.muted,.compact-help,.home-tip,.row-copy small,.recipe-copy small,
-.fixed-grid small,.zone-card p,.battle-log-compact,.v14-action .sub,
-.topbar .eyebrow,.mobile-status span,.character-grid-fixed span,
-.small-grid span,.zone-level,.v14-stats,.bottom-nav .nav-btn{
-  font-size:var(--v16-small)!important;
-  line-height:1.35!important;
-}
-button,input,select,textarea,
-.row-copy b,.recipe-copy b,.fixed-grid b,.zone-card h3,.mode-btn strong,
-.mobile-status strong,.character-grid-fixed strong,.small-grid strong,
-.v14-battle-head,.v14-action .main{
-  font-size:var(--v16-body)!important;
-}
-.section-title>span,.compact-head strong,.character-header strong{
-  font-size:var(--v16-section)!important;
-}
-.topbar h1{font-size:var(--v16-title)!important}
-
-/* 主內容改為「由內容決定高度」，不要用撐滿畫面的空白 */
-.page,
-.page.active,
-.page-shell,
-.screen,
-.content,
-.main-content,
-.page-content{
-  min-height:0!important;
-  height:auto!important;
-}
-.main{
-  align-content:start!important;
-}
-
-/* 修煉頁：卡片更緊湊 */
-#page-cultivate .panel,
-#page-cultivate .card,
-#page-cultivate .breakthrough-card{
-  margin-bottom:8px!important;
-}
-#page-cultivate .breakthrough-card{
-  padding:12px!important;
-}
-#page-cultivate .mode-grid{
-  gap:8px!important;
-}
-#page-cultivate .mode-btn{
-  min-height:70px!important;
-  padding:10px 12px!important;
-}
-
-/* 歷練頁：縮掉戰鬥紀錄與副本之間的巨大留白 */
-#page-adventure{
-  align-content:start!important;
-}
-#page-adventure .battle-card,
-#page-adventure .battle-log,
-#page-adventure .panel{
-  min-height:0!important;
-}
-#page-adventure .battle-log-compact{
-  min-height:0!important;
-  height:auto!important;
-  max-height:210px!important;
-  overflow:hidden!important;
-  padding:12px!important;
-}
-#page-adventure .zone-grid-fixed{
-  display:grid!important;
-  grid-template-columns:1fr!important;
-  grid-template-rows:none!important;
-  grid-auto-rows:auto!important;
-  gap:8px!important;
-  margin-top:8px!important;
-}
-#page-adventure .zone-card{
-  min-height:0!important;
-  height:auto!important;
-  padding:14px!important;
-  gap:6px!important;
-}
-#page-adventure .zone-card h3{
-  margin:0 0 4px!important;
-  font-size:22px!important;
-}
-#page-adventure .zone-card p{
-  margin:0 0 8px!important;
-  font-size:17px!important;
-}
-#page-adventure .zone-actions{
-  margin-top:4px!important;
-}
-#page-adventure .zone-btn{
-  min-height:52px!important;
-  font-size:20px!important;
-}
-
-/* 頂部四格資訊固定同一字級/高度 */
 .mobile-status{
-  gap:6px!important;
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0 10px 8px
 }
 .mobile-status>div{
-  min-height:74px!important;
-  padding:8px 5px!important;
+  border:1px solid var(--line-soft);min-height:67px;padding:7px 4px;text-align:center;
+  display:flex;flex-direction:column;justify-content:center
 }
-.mobile-status>div strong,
-#mRealm{
-  font-size:20px!important;
-  line-height:1.15!important;
-}
-
-/* 標題列與頁面區塊壓縮 */
-.section-title{
-  margin:8px 0!important;
-  min-height:54px!important;
-}
-.compact-head{
-  margin-bottom:6px!important;
+.mobile-status span{font-size:var(--fs-small);color:var(--muted)}
+.mobile-status strong{
+  font-size:var(--fs-strong);color:#ead7a0;margin-top:4px;line-height:1.1;
+  white-space:normal;word-break:keep-all
 }
 
-/* 洞府卡片不要把右側內容撐得忽大忽小 */
-#page-cave .subtab,
-#page-cave button{
-  font-size:18px!important;
+.page{display:none;height:100%;min-height:0;overflow:hidden;padding:0 10px 8px}
+.page.active{display:grid;grid-template-rows:auto minmax(0,1fr);align-content:start}
+
+.page-title{
+  height:54px;display:flex;align-items:center;justify-content:space-between;position:relative;
+  margin-bottom:5px;padding:0 5px
 }
-#page-cave .fixed-grid,
-#page-cave .recipe-grid{
-  gap:8px!important;
+.page-title::before,.page-title::after{
+  content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#d8d6ce 12%,#d8d6ce 88%,transparent)
+}
+.page-title::before{top:6px}.page-title::after{bottom:6px}
+.page-title span{font-size:30px;letter-spacing:.12em}
+.page-title small{font-size:var(--fs-body);color:var(--gold)}
+
+.panel,.battle-panel,.character-panel{
+  border:1px solid var(--line-soft);background:rgba(8,8,7,.88);padding:12px
+}
+.panel-head,.battle-panel-head{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px
+}
+.panel-head>span,.battle-panel-head>span{font-size:var(--fs-section)}
+.panel-head>strong,.battle-panel-head>strong{font-size:var(--fs-strong);color:var(--gold)}
+.label{font-size:var(--fs-small);color:var(--muted)}
+
+.identity-row{
+  display:flex;justify-content:space-between;align-items:center;padding:2px 4px 8px
+}
+.identity-main{display:flex;align-items:center;gap:8px}
+.identity-main strong{font-size:26px}
+.tag{border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:4px 9px;font-size:var(--fs-small)}
+.identity-sub{text-align:right;display:flex;flex-direction:column;font-size:var(--fs-small);color:var(--muted)}
+.identity-sub b{font-size:var(--fs-body);color:var(--text)}
+
+#page-cultivation.active{grid-template-rows:auto auto auto auto minmax(0,1fr)}
+.cultivation-progress{margin-bottom:8px}
+.bar{height:8px;background:#22231f;overflow:hidden;margin:8px 0}
+.bar-fill{height:100%;background:linear-gradient(90deg,#9c8245,#e1ca85);width:0}
+.breakthrough-line{
+  display:grid;grid-template-columns:1fr 1.4fr;gap:10px;align-items:center
+}
+.breakthrough-line>div{display:flex;flex-direction:column}
+.breakthrough-line strong{font-size:24px;color:var(--gold)}
+.action-btn,.primary-btn,.secondary-btn,.mode-btn,.zone-btn,.equip-btn,.skill-btn,.skill-upgrade-btn,.recipe-btn,.item-use-btn{
+  border:1px solid var(--gold);background:#11110e;color:var(--text);min-height:48px;padding:8px 10px;
+  font-size:var(--fs-body);border-radius:8px
+}
+.primary-btn{background:linear-gradient(#a88745,#6e562c);color:white;font-weight:700}
+button:disabled{opacity:.36;cursor:not-allowed}
+.breakthrough-details{margin-top:8px;border-top:1px solid var(--line-soft)}
+.breakthrough-details summary{font-size:var(--fs-body);color:var(--gold);padding:8px 0}
+.breakthrough-panel{padding-top:6px}
+.small-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.small-grid>div{background:#0d0d0b;padding:6px;text-align:center}
+.small-grid span{display:block;font-size:var(--fs-small);color:var(--muted)}
+.small-grid strong{font-size:var(--fs-body)}
+.breakthrough-tools{display:flex;align-items:center;gap:10px;margin-top:8px}
+.injury-notice{font-size:var(--fs-small);color:#d18a78;margin-top:6px}
+.hidden{display:none!important}
+
+.cultivation-mode{margin-bottom:8px}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mode-btn{display:flex;flex-direction:column;text-align:left;min-height:70px}
+.mode-btn.active{border-color:#d1ad54;box-shadow:inset 0 0 0 1px #6b582d}
+.mode-btn strong{font-size:var(--fs-strong)}
+.mode-btn small{font-size:var(--fs-small);color:var(--muted);margin-top:5px}
+
+.compact-log{min-height:0;overflow:hidden}
+.log-list{height:100%;overflow:hidden}
+.log-item{font-size:var(--fs-small);color:#c7c1b0;padding:3px 0}
+.text-btn{background:none;border:0;color:var(--muted);font-size:var(--fs-small)}
+
+#page-adventure.active{grid-template-rows:auto auto auto minmax(0,1fr)}
+.battle-panel{height:210px;overflow:hidden;margin-bottom:6px}
+.battle-log-compact{height:160px;overflow:hidden;font-size:var(--fs-body);line-height:1.45}
+.zone-pager{height:44px;margin-bottom:5px}
+.pager{display:flex;align-items:center;justify-content:center;gap:8px}
+.pager span{font-size:var(--fs-body);color:var(--gold)}
+.zone-grid-fixed{
+  min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:8px
+}
+.zone-card{
+  border:1px solid var(--line-soft);background:#0b0b09;padding:12px;
+  display:grid;grid-template-rows:auto auto 1fr auto;min-height:0;overflow:hidden
+}
+.zone-card h3{margin:0 0 5px;font-size:var(--fs-section)}
+.zone-card p{margin:0;font-size:var(--fs-body);color:var(--muted);line-height:1.35}
+.zone-level{font-size:var(--fs-small);color:var(--gold)}
+.zone-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-self:end}
+.zone-btn{font-size:var(--fs-strong);font-weight:700;min-height:48px}
+.boss-line{font-size:var(--fs-small);color:#e8b56b}
+.v14-battle,.v13-battle,.v12-battle-live{
+  height:100%;display:grid;grid-template-rows:auto auto 1fr;gap:8px
+}
+.v14-row,.v13-battle-row,.v12-fighter{border:1px solid var(--line-soft);padding:7px}
+.v14-head,.v13-battle-head,.v12-fighter-head{display:flex;justify-content:space-between;font-size:var(--fs-strong)}
+.v14-stats{font-size:var(--fs-small);color:var(--muted);margin-top:3px}
+.v14-hp,.v13-hp,.v12-hp{height:10px;background:#272721;margin-top:5px;overflow:hidden}
+.v14-hp i,.v13-hp i,.v12-hp i{display:block;height:100%;transition:width .4s}
+.v14-enemy .v14-hp i,.v13-enemy .v13-hp i{background:#b3483f}
+.v14-player .v14-hp i,.v13-player .v13-hp i{background:#c0a052}
+.v14-action,.v13-turns,.v12-roundlog{
+  border:1px solid #544728;background:#10100d;padding:8px;overflow:hidden;
+  font-size:var(--fs-body);line-height:1.35
 }
 
-/* 底部導航仍保留大觸控區，但文字一致 */
-.bottom-nav .nav-btn{
-  font-size:18px!important;
+#page-cave.active{grid-template-rows:auto auto minmax(0,1fr)}
+.cave-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:7px}
+.subtab{
+  min-height:48px;border:1px solid var(--line-soft);background:#080806;color:var(--muted);
+  font-size:var(--fs-body)
 }
-.bottom-nav .nav-btn span{
-  font-size:25px!important;
+.subtab.active{color:var(--gold);border-color:var(--gold)}
+.cave-panel{display:none;min-height:0;height:100%;overflow:hidden}
+.cave-panel.active{display:grid;grid-template-rows:auto minmax(0,1fr)}
+.cave-head{min-height:42px}
+.cave-head>div:first-child{display:flex;align-items:baseline;gap:8px}
+.cave-head span{font-size:var(--fs-section)}
+.cave-head small{font-size:var(--fs-small);color:var(--gold)}
+.fixed-grid{min-height:0;display:grid;gap:7px}
+.inventory-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.alchemy-grid{grid-template-columns:1fr;grid-template-rows:repeat(3,1fr)}
+.equipment-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.skill-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.item-row,.recipe-row,.equip-row,.skill-row{
+  border:1px solid var(--line-soft);background:#0b0b09;padding:10px;min-height:0;overflow:hidden;
+  display:flex;flex-direction:column;gap:5px
 }
+.row-copy b,.recipe-copy b{font-size:var(--fs-strong)}
+.row-copy small,.recipe-copy small{font-size:var(--fs-small);color:var(--muted);line-height:1.35}
+.item-actions{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.item-actions strong{font-size:var(--fs-strong);color:var(--gold)}
+.fixed-grid button{min-height:40px;font-size:var(--fs-small)}
+.compact-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px}
+.slot{border:1px solid var(--line-soft);padding:7px;min-height:54px}
+.slot span{display:block;font-size:var(--fs-small);color:var(--muted)}
+.slot strong{font-size:var(--fs-body)}
+.equipment-pager{height:40px;margin-bottom:5px}
+.dev-inline summary{font-size:var(--fs-small);color:var(--muted)}
+.dev-inline[open]{position:absolute;right:10px;background:#111;padding:5px;border:1px solid var(--line-soft);z-index:20}
 
-/* iPhone 實機高度較小時只壓間距，不再縮字 */
-@media (max-height:780px){
-  .topbar{padding-top:6px!important;padding-bottom:4px!important}
-  .mobile-status>div{min-height:68px!important}
-  .section-title{min-height:48px!important;margin:5px 0!important}
-  #page-adventure .battle-log-compact{max-height:170px!important}
-  #page-adventure .zone-card{padding:11px!important}
-  #page-adventure .zone-btn{min-height:48px!important}
+#page-character.active{grid-template-rows:auto minmax(0,1fr)}
+.character-panel{height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:8px}
+.character-header{display:flex;justify-content:space-between;align-items:center}
+.character-header>div{display:flex;gap:8px;align-items:center}
+.character-header strong{font-size:28px}
+.rename-compact{display:grid;grid-template-columns:1fr auto auto;gap:6px}
+.rename-compact input{min-width:0;background:#050505;border:1px solid var(--line-soft);color:var(--text);padding:8px;font-size:var(--fs-body)}
+.character-grid-fixed{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,1fr);gap:7px;min-height:0}
+.character-grid-fixed>div{border:1px solid var(--line-soft);padding:10px;display:flex;flex-direction:column;justify-content:center}
+.character-grid-fixed span{font-size:var(--fs-small);color:var(--muted)}
+.character-grid-fixed strong{font-size:var(--fs-strong);margin-top:4px}
+
+.bottom-nav{
+  display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-soft);
+  background:#030303;padding:5px 4px max(7px,env(safe-area-inset-bottom))
+}
+.nav-btn{
+  min-height:64px;border:0;background:transparent;color:#8f8a7b;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px
+}
+.nav-btn span{font-size:24px}
+.nav-btn b{font-size:var(--fs-body);font-weight:400}
+.nav-btn.active{color:var(--gold)}
+
+dialog{border:1px solid var(--gold);background:#0c0c0a;color:var(--text);border-radius:12px;max-width:360px}
+.dialog-card h2{font-size:26px}.dialog-card p{font-size:var(--fs-body)}
+.offline-reward{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.offline-reward>div{border:1px solid var(--line-soft);padding:10px}
+.offline-reward span{font-size:var(--fs-small);color:var(--muted)}
+.offline-reward strong{display:block;font-size:var(--fs-strong)}
+
+@media(max-height:760px){
+  :root{--fs-small:15px;--fs-body:17px;--fs-strong:19px;--fs-section:22px;--fs-title:31px}
+  .topbar{padding-top:6px}
+  .mobile-status>div{min-height:60px}
+  .page-title{height:48px}
+  .battle-panel{height:185px}
+  .battle-log-compact{height:136px}
+  .nav-btn{min-height:58px}
 }

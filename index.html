@@ -3,54 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0d0d0c" />
+  <meta name="theme-color" content="#050505" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="無盡仙途" />
-  <title>無盡仙途 V16</title>
-  <link rel="manifest" href="./manifest.json?v=16" />
-  <link rel="stylesheet" href="./css/game.css?v=16" />
+  <title>無盡仙途 V17</title>
+  <link rel="manifest" href="./manifest.json?v=17" />
+  <link rel="stylesheet" href="./css/game.css?v=17" />
 </head>
 <body>
-  <main class="game-shell">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">凡人修仙 · 單機放置</div>
-        <h1>無盡仙途</h1>
+<main class="game-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="eyebrow">凡人修仙 · 單機放置</div>
+      <h1>無盡仙途</h1>
+    </div>
+    <div class="top-actions">
+      <span class="version">V17</span>
+      <button id="resetBtn" class="ghost-btn" type="button">重置</button>
+    </div>
+  </header>
+
+  <section class="mobile-status" aria-label="角色總覽">
+    <div><span>境界</span><strong id="mRealm">--</strong></div>
+    <div><span>修為</span><strong id="mCultivation">0</strong></div>
+    <div><span>靈石</span><strong id="mStone">0</strong></div>
+    <div><span>戰力</span><strong id="mPower">0</strong></div>
+  </section>
+
+  <!-- 修煉 -->
+  <section id="page-cultivation" class="page active">
+    <div class="page-title brush-title"><span>修煉</span></div>
+
+    <section class="identity-row">
+      <div class="identity-main">
+        <strong id="playerName">李柏儒</strong>
+        <span class="tag">散修</span>
       </div>
-      <div class="top-actions">
-        <span class="version">V16</span>
-        <button id="resetBtn" class="ghost-btn" type="button">重置</button>
+      <div class="identity-sub">
+        <span id="realmText">煉氣一層</span>
+        <span>修煉 <b id="rateText">+1.0 / 秒</b></span>
       </div>
-    </header>
-    <section class="mobile-status">
-      <div><span>境界</span><strong id="mRealm">--</strong></div>
-      <div><span>修為</span><strong id="mCultivation">0</strong></div>
-      <div><span>靈石</span><strong id="mStone">0</strong></div>
-      <div><span>戰力</span><strong id="mPower">0</strong></div>
     </section>
 
+    <section class="panel cultivation-progress">
+      <div class="panel-head">
+        <span>當前境界</span>
+        <strong id="progressLabel">0 / 100</strong>
+      </div>
+      <div class="bar"><div id="progressBar" class="bar-fill"></div></div>
 
-    <section id="page-cultivation" class="page active">
-      <section class="home-identity">
+      <div class="breakthrough-line">
         <div>
-          <strong id="playerName">李柏儒</strong>
-          <span class="tag">散修</span>
+          <span class="label">突破成功率</span>
+          <strong id="breakthroughRate">--</strong>
         </div>
-        <div class="home-sub"><span id="realmText">煉氣一層</span><span>修煉 <b id="rateText">+1.0 / 秒</b></span></div>
-      </section>
-      <section class="card progress-card">
-        <div class="section-title">
-          <span>當前境界</span>
-          <strong id="progressLabel">0 / 100</strong>
-        </div>
-        <div class="bar"><div id="progressBar" class="bar-fill"></div></div>
+        <button id="breakthroughBtn" class="action-btn primary-btn" type="button" disabled>修為未滿</button>
+      </div>
 
-        <details class="breakthrough-details"><summary>突破資訊</summary><div class="breakthrough-panel">
-          <div class="breakthrough-row">
-            <span>突破成功率</span>
-            <strong id="breakthroughRate">--</strong>
-          </div>
+      <details class="breakthrough-details">
+        <summary>突破資訊</summary>
+        <div class="breakthrough-panel">
           <div class="small-grid">
             <div><span>基礎</span><strong id="baseRate">--</strong></div>
             <div><span>道心</span><strong id="daoBonus">--</strong></div>
@@ -61,172 +74,180 @@
             <span id="pillCountText">×0</span>
           </div>
           <div id="injuryNotice" class="injury-notice hidden">內傷未癒：修煉效率 -30%，突破率 -15%</div>
-        </div></details>
-
-        <button id="breakthroughBtn" class="primary-btn" type="button" disabled>修為未滿</button>
-      </section>
-
-      <section class="card cultivation-card">
-        <div class="section-title">
-          <span>閉關修煉</span>
-          <strong id="runningStatus">吐納中</strong>
         </div>
-        <p class="muted home-tip">離線仍會累積收益。</p>
-        <div class="choice-grid">
-          <button class="mode-btn active" data-mode="breath" type="button">
-            <strong>吐納修煉</strong><small>修為效率最高</small>
-          </button>
-          <button class="mode-btn" data-mode="wander" type="button">
-            <strong>外出歷練</strong><small>修為較慢、靈石較多</small>
-          </button>
-        </div>
-      </section>
-
-      <section class="card log-card">
-        <div class="section-title"><span>修行紀錄</span><button id="clearLogBtn" class="text-btn" type="button">清空</button></div>
-        <div id="logList" class="log-list" aria-live="polite"></div>
-      </section>
+      </details>
     </section>
 
-    <section id="page-adventure" class="page">
-      <section class="compact-head">
-        <div>
-          <strong>歷練</strong>
-          <small id="energyText">體力 5 / 5</small>
-        </div>
+    <section class="panel cultivation-mode">
+      <div class="panel-head">
+        <span>閉關修煉</span>
+        <strong id="runningStatus">吐納中</strong>
+      </div>
+      <div class="choice-grid">
+        <button class="mode-btn active" data-mode="breath" type="button">
+          <strong>吐納修煉</strong>
+          <small>修為效率最高</small>
+        </button>
+        <button class="mode-btn" data-mode="wander" type="button">
+          <strong>外出歷練</strong>
+          <small>修為較慢、靈石較多</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="panel compact-log">
+      <div class="panel-head">
+        <span>修行紀錄</span>
+        <button id="clearLogBtn" class="text-btn" type="button">清空</button>
+      </div>
+      <div id="logList" class="log-list" aria-live="polite"></div>
+    </section>
+  </section>
+
+  <!-- 歷練 -->
+  <section id="page-adventure" class="page">
+    <div class="page-title brush-title">
+      <span>歷練</span>
+      <small id="energyText">自由選擇副本</small>
+    </div>
+
+    <section class="battle-panel">
+      <div class="battle-panel-head">
+        <span>戰鬥紀錄</span>
+        <strong id="battleResult">尚未出戰</strong>
+      </div>
+      <div id="battleLog" class="battle-log-compact">選擇一處地點開始歷練。</div>
+    </section>
+
+    <div class="pager zone-pager">
+      <button id="zonePrevBtn" class="pager-btn" type="button">‹</button>
+      <span id="zonePageText">1/3</span>
+      <button id="zoneNextBtn" class="pager-btn" type="button">›</button>
+    </div>
+
+    <section id="zoneList" class="zone-grid-fixed"></section>
+  </section>
+
+  <!-- 洞府 -->
+  <section id="page-cave" class="page">
+    <div class="page-title brush-title"><span>洞府</span></div>
+
+    <div class="subtabs cave-tabs">
+      <button class="subtab active" data-cave-tab="inventory" type="button">背包</button>
+      <button class="subtab" data-cave-tab="alchemy" type="button">煉丹</button>
+      <button class="subtab" data-cave-tab="equipment" type="button">裝備</button>
+      <button class="subtab" data-cave-tab="skills" type="button">功法</button>
+    </div>
+
+    <section id="cave-inventory" class="cave-panel active">
+      <div class="panel-head cave-head">
+        <div><span>儲物袋</span><small id="bagCount">0 種物品</small></div>
         <div class="pager">
-          <button id="zonePrevBtn" class="mini-btn" type="button">‹</button>
-          <span id="zonePageText">1/2</span>
-          <button id="zoneNextBtn" class="mini-btn" type="button">›</button>
+          <button id="bagPrevBtn" class="pager-btn" type="button">‹</button>
+          <span id="bagPageText">1/1</span>
+          <button id="bagNextBtn" class="pager-btn" type="button">›</button>
         </div>
-      </section>
-
-      <section class="battle-strip">
-        <div class="battle-strip-head">
-          <span>戰鬥紀錄</span>
-          <strong id="battleResult">尚未出戰</strong>
-        </div>
-        <div id="battleLog" class="battle-log-compact">選擇一處地點開始歷練。</div>
-      </section>
-
-      <section id="zoneList" class="zone-grid-fixed"></section>
+      </div>
+      <div id="inventoryList" class="fixed-grid inventory-grid"></div>
     </section>
 
-    <section id="page-cave" class="page">
-      <div class="subtabs cave-tabs">
-        <button class="subtab active" data-cave-tab="inventory" type="button">背包</button>
-        <button class="subtab" data-cave-tab="alchemy" type="button">煉丹</button>
-        <button class="subtab" data-cave-tab="equipment" type="button">裝備</button>
-        <button class="subtab" data-cave-tab="skills" type="button">功法</button>
+    <section id="cave-alchemy" class="cave-panel">
+      <div class="panel-head cave-head">
+        <div><span>煉丹</span><small id="alchemyText">已煉 0 次</small></div>
+        <details class="dev-inline">
+          <summary>測試</summary>
+          <button id="testAlchemyBtn" class="pager-btn" type="button">領材料</button>
+        </details>
+      </div>
+      <div id="alchemyList" class="fixed-grid alchemy-grid"></div>
+    </section>
+
+    <section id="cave-equipment" class="cave-panel">
+      <div class="panel-head cave-head">
+        <div><span>裝備</span><small id="powerText">戰力 0</small></div>
+        <details class="dev-inline">
+          <summary>測試</summary>
+          <button id="testGearBtn" class="pager-btn" type="button">領裝備</button>
+        </details>
+      </div>
+      <div id="equipmentSlots" class="equipment-slots compact-slots"></div>
+      <div class="pager equipment-pager">
+        <button id="equipPrevBtn" class="pager-btn" type="button">‹</button>
+        <span id="equipPageText">1/1</span>
+        <button id="equipNextBtn" class="pager-btn" type="button">›</button>
+      </div>
+      <div id="equipmentBag" class="fixed-grid equipment-grid"></div>
+    </section>
+
+    <section id="cave-skills" class="cave-panel">
+      <div class="panel-head cave-head">
+        <div><span>功法</span><small id="skillCountText">0 / 3</small></div>
+      </div>
+      <div id="skillList" class="fixed-grid skill-grid"></div>
+    </section>
+  </section>
+
+  <!-- 角色 -->
+  <section id="page-character" class="page">
+    <div class="page-title brush-title"><span>角色</span></div>
+
+    <section class="character-panel">
+      <div class="character-header">
+        <div>
+          <strong id="charDisplayName">李柏儒</strong>
+          <span class="tag">散修</span>
+        </div>
+        <button id="openRenameBtn" class="pager-btn" type="button">改名</button>
       </div>
 
-      <section id="cave-inventory" class="cave-panel active">
-        <div class="compact-head">
-          <div><strong>儲物袋</strong><small id="bagCount">0 種物品</small></div>
-          <div class="pager">
-            <button id="bagPrevBtn" class="mini-btn" type="button">‹</button>
-            <span id="bagPageText">1/1</span>
-            <button id="bagNextBtn" class="mini-btn" type="button">›</button>
-          </div>
-        </div>
-        <div id="inventoryList" class="fixed-grid six-grid"></div>
-      </section>
-
-      <section id="cave-alchemy" class="cave-panel">
-        <div class="compact-head">
-          <div><strong>煉丹</strong><small id="alchemyText">已煉 0 次</small></div>
-          <details class="dev-inline">
-            <summary>測試</summary>
-            <button id="testAlchemyBtn" class="mini-btn" type="button">領材料</button>
-          </details>
-        </div>
-        <div id="alchemyList" class="fixed-grid alchemy-grid"></div>
-      </section>
-
-      <section id="cave-equipment" class="cave-panel">
-        <div class="compact-head">
-          <div><strong>裝備</strong><small id="powerText">戰力 0</small></div>
-          <details class="dev-inline">
-            <summary>測試</summary>
-            <button id="testGearBtn" class="mini-btn" type="button">領裝備</button>
-          </details>
-        </div>
-        <div id="equipmentSlots" class="equipment-slots compact-slots"></div>
-        <div class="pager equipment-pager">
-          <button id="equipPrevBtn" class="mini-btn" type="button">‹</button>
-          <span id="equipPageText">1/1</span>
-          <button id="equipNextBtn" class="mini-btn" type="button">›</button>
-        </div>
-        <div id="equipmentBag" class="fixed-grid equip-grid"></div>
-      </section>
-
-      <section id="cave-skills" class="cave-panel">
-        <div class="compact-head">
-          <div><strong>功法</strong><small id="skillCountText">0 / 3</small></div>
-          <div></div>
-        </div>
-        <div id="skillList" class="fixed-grid skill-grid"></div>
-      </section>
-    </section>
-
-    <section id="page-character" class="page">
-      <section class="character-fixed">
-        <div class="character-header">
-          <div>
-            <strong id="charDisplayName">李柏儒</strong>
-            <span class="tag">散修</span>
-          </div>
-          <button id="openRenameBtn" class="mini-btn" type="button">改名</button>
-        </div>
-
-        <div id="renamePanel" class="rename-compact hidden">
-          <input id="playerNameInput" maxlength="12" autocomplete="off" />
-          <button id="renameBtn" class="mini-btn" type="button">確定</button>
-          <button id="cancelRenameBtn" class="mini-btn" type="button">取消</button>
-        </div>
-
-        <div class="character-grid-fixed">
-          <div><span>境界</span><strong id="charRealm">煉氣一層</strong></div>
-          <div><span>道心</span><strong id="charDao">0</strong></div>
-          <div><span>戰力</span><strong id="charPower">0</strong></div>
-          <div><span>擊敗妖獸</span><strong id="charKills">0</strong></div>
-          <div><span>觸發機緣</span><strong id="charEvents">0</strong></div>
-          <div><span>突破成功</span><strong id="charBreaks">0</strong></div>
-          <div><span>Boss 擊破</span><strong id="charBoss">0</strong></div>
-          <div><span>煉丹次數</span><strong id="charAlchemy">0</strong></div>
-        </div>
-      </section>
-    </section>
-
-    <nav class="bottom-nav" aria-label="主選單">
-      <button class="nav-btn active" data-page="cultivation" type="button"><span>☯</span>修煉</button>
-      <button class="nav-btn" data-page="adventure" type="button"><span>⚔</span>歷練</button>
-      <button class="nav-btn" data-page="cave" type="button"><span>⌂</span>洞府</button>
-      <button class="nav-btn" data-page="character" type="button"><span>人</span>角色</button>
-    </nav>
-  </main>
-
-  <dialog id="offlineDialog">
-    <form method="dialog" class="dialog-card">
-      <h2>閉關結束</h2>
-      <p id="offlineTimeText"></p>
-      <div class="offline-reward">
-        <div><span>修為</span><strong id="offlineCultivationText">+0</strong></div>
-        <div><span>靈石</span><strong id="offlineStoneText">+0</strong></div>
+      <div id="renamePanel" class="rename-compact hidden">
+        <input id="playerNameInput" maxlength="12" autocomplete="off" />
+        <button id="renameBtn" class="pager-btn" type="button">確定</button>
+        <button id="cancelRenameBtn" class="pager-btn" type="button">取消</button>
       </div>
-      <button class="primary-btn" value="ok">收取</button>
-    </form>
-  </dialog>
 
-  <dialog id="eventDialog">
-    <form method="dialog" class="dialog-card">
-      <h2 id="eventTitle">機緣</h2>
-      <p id="eventText"></p>
-      <div id="eventRewards" class="event-rewards"></div>
-      <button class="primary-btn" value="ok">收下機緣</button>
-    </form>
-  </dialog>
+      <div class="character-grid-fixed">
+        <div><span>境界</span><strong id="charRealm">煉氣一層</strong></div>
+        <div><span>道心</span><strong id="charDao">0</strong></div>
+        <div><span>戰力</span><strong id="charPower">0</strong></div>
+        <div><span>擊敗妖獸</span><strong id="charKills">0</strong></div>
+        <div><span>觸發機緣</span><strong id="charEvents">0</strong></div>
+        <div><span>突破成功</span><strong id="charBreaks">0</strong></div>
+        <div><span>Boss 擊破</span><strong id="charBoss">0</strong></div>
+        <div><span>煉丹次數</span><strong id="charAlchemy">0</strong></div>
+      </div>
+    </section>
+  </section>
 
-  <script type="module" src="./js/game.js?v=16"></script>
+  <nav class="bottom-nav" aria-label="主選單">
+    <button class="nav-btn active" data-page="cultivation" type="button"><span>☯</span><b>修煉</b></button>
+    <button class="nav-btn" data-page="adventure" type="button"><span>⚔</span><b>歷練</b></button>
+    <button class="nav-btn" data-page="cave" type="button"><span>⌂</span><b>洞府</b></button>
+    <button class="nav-btn" data-page="character" type="button"><span>人</span><b>角色</b></button>
+  </nav>
+</main>
+
+<dialog id="offlineDialog">
+  <form method="dialog" class="dialog-card">
+    <h2>閉關結束</h2>
+    <p id="offlineTimeText"></p>
+    <div class="offline-reward">
+      <div><span>修為</span><strong id="offlineCultivationText">+0</strong></div>
+      <div><span>靈石</span><strong id="offlineStoneText">+0</strong></div>
+    </div>
+    <button class="primary-btn" value="ok">收取</button>
+  </form>
+</dialog>
+
+<dialog id="eventDialog">
+  <form method="dialog" class="dialog-card">
+    <h2 id="eventTitle">機緣</h2>
+    <p id="eventText"></p>
+    <div id="eventRewards" class="event-rewards"></div>
+    <button class="primary-btn" value="ok">收下機緣</button>
+  </form>
+</dialog>
+
+<script type="module" src="./js/game.js?v=17"></script>
 </body>
 </html>
