@@ -93,7 +93,7 @@ function defaultSave(){
 }
 
 let state=null,db=null;
-let ui={zonePage:0,bagPage:0,equipPage:0,caveTab:"inventory"};
+let ui={zonePage:0,bagPage:0,equipPage:0,caveTab:"inventory"}; let battleBusy=false;
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.floor(n).toLocaleString("zh-TW");
 function escapeHTML(str){return String(str).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
@@ -204,10 +204,7 @@ function breakthroughChance(){
   return Math.max(.05,Math.min(.99,base+dao+injury+state.activePillBonus+(e.breakthrough||0)));
 }
 
-function restoreEnergy(){
-  const now=Date.now(),elapsed=Math.max(0,now-(state.energyUpdatedAt||now)),gained=Math.floor(elapsed/(20*60*1000));
-  if(gained>0){state.energy=Math.min(5,state.energy+gained);state.energyUpdatedAt+=gained*20*60*1000}
-}
+function restoreEnergy(){ state.energy=999999; }
 function applyElapsed(seconds,offline=false){
   const capped=Math.max(0,Math.min(seconds,offline?OFFLINE_CAP_SECONDS:seconds)),cGain=currentRate()*capped,sGain=currentStoneRate()*capped;
   state.cultivation+=cGain;state.spiritStone+=sGain;return{cGain,sGain,seconds:capped};
@@ -321,7 +318,7 @@ function renderSkills(){
 }
 function renderZones(){
   restoreEnergy();
-  $("energyText").textContent=`體力 ${state.energy} / 5`;
+  $("energyText").textContent="體力 ∞";
   const perPage=2;
   const pageCount=Math.max(1,Math.ceil(zones.length/perPage));
   ui.zonePage=Math.max(0,Math.min(ui.zonePage,pageCount-1));
@@ -330,8 +327,8 @@ function renderZones(){
   $("zonePrevBtn").disabled=ui.zonePage<=0;
   $("zoneNextBtn").disabled=ui.zonePage>=pageCount-1;
   $("zoneList").innerHTML=visible.map(z=>{
-    const locked=state.realmIndex<z.minRealm,wins=state.zoneWins[z.id]||0,boss=!!state.bossReady[z.id],can1=!locked&&state.energy>=z.energy,can3=!locked&&state.energy>=z.energy*3;
-    return `<section class="zone-card card"><h3>${z.name}</h3><p>${z.desc}</p><div class="zone-level">${locked?`需 ${realms[z.minRealm].name}`:`勝場 ${wins}/4 · 體力 ${z.energy}`}</div>${boss?`<div class="boss-line">Boss：${z.boss}</div>`:""}<div class="zone-actions"><button class="zone-btn" data-zone="${z.id}" data-runs="1" type="button" ${can1?"":"disabled"}>×1</button><button class="zone-btn" data-zone="${z.id}" data-runs="3" type="button" ${can3?"":"disabled"}>×3</button></div>${boss?`<button class="zone-btn boss-btn" data-boss="${z.id}" type="button" ${can1?"":"disabled"}>Boss</button>`:""}</section>`;
+    const locked=state.realmIndex<z.minRealm,wins=state.zoneWins[z.id]||0,boss=!!state.bossReady[z.id];
+    return `<section class="zone-card card"><h3>${z.name}</h3><p>${z.desc}</p><div class="zone-level">${locked?`需 ${realms[z.minRealm].name}`:`勝場 ${wins}/4 · 體力 ∞`}</div>${boss?`<div class="boss-line">Boss：${z.boss}</div>`:""}<div class="zone-actions"><button class="zone-btn" data-zone="${z.id}" data-runs="1" type="button" ${locked?"disabled":""}>×1</button><button class="zone-btn" data-zone="${z.id}" data-runs="3" type="button" ${locked?"disabled":""}>×3</button></div>${boss?`<button class="zone-btn boss-btn" data-boss="${z.id}" type="button" ${locked?"disabled":""}>Boss</button>`:""}</section>`;
   }).join("");
   document.querySelectorAll(".zone-btn[data-zone]").forEach(b=>b.addEventListener("click",()=>runAdventureBatch(b.dataset.zone,Number(b.dataset.runs))));
   document.querySelectorAll(".boss-btn").forEach(b=>b.addEventListener("click",()=>runBoss(b.dataset.boss)));
@@ -354,10 +351,9 @@ function render(){
 }
 
 async function runAdventureOnce(z){
-  if(state.energy<z.energy)return{ok:false,lines:["體力不足。"]};
-  state.energyUpdatedAt=Date.now();
-  const playerPower=totalPower()+Math.random()*8,enemyPower=z.difficulty*(.78+Math.random()*.55),monster=z.monsters[Math.floor(Math.random()*z.monsters.length)],lines=[`遭遇 ${monster}（我方 ${Math.round(playerPower)} / 敵方 ${Math.round(enemyPower)}）`];
-  if(playerPower>=enemyPower){
+  const result=await animateBattle(z,false);
+  const lines=[];
+  if(result.win){
     const cg=Math.round(25+z.difficulty*1.7+Math.random()*35),sg=Math.round(18+z.difficulty*2+Math.random()*40);
     state.cultivation+=cg;state.spiritStone+=sg;state.stats.kills+=1;state.zoneWins[z.id]=(state.zoneWins[z.id]||0)+1;lines.push(`勝利：修為 +${cg}、靈石 +${sg}`);
     if(Math.random()<.72){const item=z.materials[Math.floor(Math.random()*z.materials.length)],count=Math.random()<.18?2:1;addItem(item,count);lines.push(`${item} ×${count}`)}
@@ -365,31 +361,72 @@ async function runAdventureOnce(z){
     const skill=trySkillDrop(z);if(skill)lines.push(`功法：《${skill}》`);
     if((state.zoneWins[z.id]||0)>=4){state.zoneWins[z.id]=0;state.bossReady[z.id]=true;lines.push(`Boss「${z.boss}」出現！`)}
     if(Math.random()<.15)triggerEvent();
-    return{ok:true,lines};
+  }else{
+    const loss=Math.max(5,Math.round(realm().need*.03));state.cultivation=Math.max(0,state.cultivation-loss);state.injuryUntil=Date.now()+5*60*1000;lines.push(`戰敗：修為 -${loss}，輕傷 5 分鐘。`);
   }
-  const loss=Math.max(5,Math.round(realm().need*.03));state.cultivation=Math.max(0,state.cultivation-loss);state.injuryUntil=Date.now()+5*60*1000;lines.push(`戰敗：修為 -${loss}，輕傷 5 分鐘。`);return{ok:false,lines};
+  return {ok:result.win,lines};
 }
 
 async function runAdventureBatch(zoneId,runs){
+  if(battleBusy)return;
   const z=zones.find(x=>x.id===zoneId);if(!z||state.realmIndex<z.minRealm)return;
-  const actual=Math.min(runs,Math.floor(state.energy/z.energy));if(actual<=0)return;
-  const all=[];let wins=0;
-  for(let i=0;i<actual;i++){const r=await runAdventureOnce(z);if(r.ok)wins++;all.push(`第 ${i+1} 戰：${r.lines.join("；")}`)}
-  $("battleResult").textContent=`${wins}/${actual} 勝`;$("battleLog").textContent=all.join("\n\n");addLog(`於「${z.name}」連戰 ${actual} 場，勝 ${wins} 場。`);render();await writeSave();
+  battleBusy=true;document.querySelectorAll(".zone-btn,.boss-btn").forEach(b=>b.disabled=true);
+  let wins=0,last=[];
+  for(let i=0;i<runs;i++){const r=await runAdventureOnce(z);if(r.ok)wins++;last=r.lines;$("battleResult").textContent=`${i+1}/${runs} · ${r.ok?"勝":"敗"}`;await sleep(450)}
+  addLog(`於「${z.name}」連戰 ${runs} 場，勝 ${wins} 場。${last.join("、")}`);
+  battleBusy=false;render();await writeSave();
 }
 
 async function runBoss(zoneId){
-  const z=zones.find(x=>x.id===zoneId);if(!z||!state.bossReady[z.id]||state.energy<z.energy)return;
-  state.energyUpdatedAt=Date.now();
-  const playerPower=totalPower()+Math.random()*10,enemyPower=z.difficulty*1.35*(.9+Math.random()*.35),lines=[`Boss：${z.boss}`,`我方 ${Math.round(playerPower)} / Boss ${Math.round(enemyPower)}`];
-  if(playerPower>=enemyPower){
+  if(battleBusy)return;
+  const z=zones.find(x=>x.id===zoneId);if(!z||!state.bossReady[z.id]||state.realmIndex<z.minRealm)return;
+  battleBusy=true;document.querySelectorAll(".zone-btn,.boss-btn").forEach(b=>b.disabled=true);
+  const result=await animateBattle(z,true);
+  if(result.win){
     const cg=Math.round(100+z.difficulty*4),sg=Math.round(120+z.difficulty*5);
-    state.cultivation+=cg;state.spiritStone+=sg;state.stats.bossKills=(state.stats.bossKills||0)+1;state.bossReady[z.id]=false;lines.push(`擊破 Boss！修為 +${cg}、靈石 +${sg}`);
-    const gear=tryEquipmentDrop(z,true);if(gear)lines.push(`Boss 掉落：${gear}`);if(Math.random()<.35){addItem("築基丹",1);lines.push("築基丹 ×1")}
-  }else{state.injuryUntil=Date.now()+10*60*1000;lines.push("Boss 戰敗，內傷 10 分鐘；Boss 仍會留在此處。")}
-  $("battleResult").textContent=playerPower>=enemyPower?"Boss 擊破":"Boss 戰敗";$("battleLog").textContent=lines.join("\n");addLog(lines[lines.length-1]);render();await writeSave();
+    state.cultivation+=cg;state.spiritStone+=sg;state.stats.bossKills=(state.stats.bossKills||0)+1;state.bossReady[z.id]=false;
+    const rewards=[`修為 +${cg}`,`靈石 +${sg}`];const gear=tryEquipmentDrop(z,true);if(gear)rewards.push(`裝備：${gear}`);if(Math.random()<.35){addItem("築基丹",1);rewards.push("築基丹 ×1")}
+    addLog(`擊破 Boss「${z.boss}」：${rewards.join("、")}`);$("battleResult").textContent="Boss 擊破";
+  }else{state.injuryUntil=Date.now()+10*60*1000;addLog(`Boss「${z.boss}」戰敗，內傷 10 分鐘。`);$("battleResult").textContent="Boss 戰敗"}
+  battleBusy=false;render();await writeSave();
 }
 
+
+function combatStats(){
+  const e=equipmentBonus(), s=skillBonus(), power=Math.round(totalPower());
+  return {
+    hp: Math.max(220,220+state.realmIndex*55+Math.round(e.power*8)),
+    atk: Math.max(28,Math.round(power*1.45+s.power*.7)),
+    def: Math.max(10,Math.round(power*.55+e.power*.55))
+  };
+}
+function enemyCombatStats(z,boss=false){
+  const scale=boss?1.85:1;
+  return {hp:Math.round((150+z.difficulty*16)*scale),atk:Math.round((18+z.difficulty*1.55)*scale),def:Math.round((6+z.difficulty*.62)*scale)};
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+async function animateBattle(z,boss=false){
+  const monster=boss?z.boss:z.monsters[Math.floor(Math.random()*z.monsters.length)];
+  const p=combatStats(), e=enemyCombatStats(z,boss);
+  let php=p.hp,ehp=e.hp,round=0;
+  const host=$("battleLog");
+  $("battleResult").textContent=boss?"Boss 戰鬥中":"戰鬥中";
+  host.innerHTML=`<div class="v13-battle">
+    <div class="v13-battle-row v13-enemy"><div class="v13-battle-head"><span>${monster}</span><span class="e-num">${ehp}/${e.hp}</span></div><div class="v13-hp"><i class="e-bar"></i></div></div>
+    <div class="v13-battle-row v13-player"><div class="v13-battle-head"><span>${state.playerName}</span><span class="p-num">${php}/${p.hp}</span></div><div class="v13-hp"><i class="p-bar"></i></div></div>
+    <div class="v13-turns"></div></div>`;
+  const log=host.querySelector(".v13-turns"),eb=host.querySelector(".e-bar"),pb=host.querySelector(".p-bar"),en=host.querySelector(".e-num"),pn=host.querySelector(".p-num");
+  const add=t=>{log.innerHTML=`<div>${t}</div>`+log.innerHTML};
+  while(php>0&&ehp>0&&round<40){
+    round++;
+    const dealt=Math.max(1,Math.round(p.atk*(.88+Math.random()*.24)-e.def*(.82+Math.random()*.18)));
+    ehp=Math.max(0,ehp-dealt);add(`第 ${round} 回合：你攻擊 ${monster}，造成 ${dealt} 傷害。`);eb.style.width=`${ehp/e.hp*100}%`;en.textContent=`${ehp}/${e.hp}`;await sleep(650);
+    if(ehp<=0)break;
+    const taken=Math.max(1,Math.round(e.atk*(.88+Math.random()*.24)-p.def*(.82+Math.random()*.18)));
+    php=Math.max(0,php-taken);add(`${monster} 反擊，你受到 ${taken} 傷害。`);pb.style.width=`${php/p.hp*100}%`;pn.textContent=`${php}/${p.hp}`;await sleep(650);
+  }
+  return {win:ehp<=0,monster};
+}
 function triggerEvent(){
   const e=events[Math.floor(Math.random()*events.length)],r=e.reward,rewards=[];
   if(r.cultivation){state.cultivation+=r.cultivation;rewards.push(`修為 +${r.cultivation}`)}
@@ -429,7 +466,7 @@ $("clearLogBtn").addEventListener("click",async()=>{state.logs=[];render();await
 $("testGearBtn").addEventListener("click",async()=>{
   for(const name of["玄鐵短劍","霧隱袍","靈紋玉佩"]){if(!state.equipmentInventory.includes(name))state.equipmentInventory.push(name);state.equipmentMeta[name]=makeEquipmentMeta(name,2)}
   if(!state.learnedSkills.includes("青木長生訣")){state.learnedSkills.push("青木長生訣");state.skillLevels["青木長生訣"]=1}
-  addItem("築基丹",1);addLog("已領取 V12 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
+  addItem("築基丹",1);addLog("已領取 V13 測試裝備：至少上品品質，附隨機詞條。");render();await writeSave();
 });
 $("testAlchemyBtn").addEventListener("click",async()=>{
   addItem("青靈草",6);
@@ -479,11 +516,13 @@ $("cancelRenameBtn").addEventListener("click",()=>{
 
 $("resetBtn").addEventListener("click",async()=>{if(!confirm("確定重置所有進度？此動作無法復原。"))return;state=defaultSave();render();await writeSave()});
 document.addEventListener("visibilitychange",async()=>{if(document.visibilityState==="hidden"&&state)await writeSave()});
-if("serviceWorker"in navigator)navigator.serviceWorker.register("./service-worker.js").catch(console.warn);
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./service-worker.js?v=13",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn);
+}
 bootstrap().catch(err=>{console.error(err);alert("遊戲初始化失敗，請重新整理頁面。")});
 
-/* ===== V12 battle presentation layer ===== */
-window.V12Battle = window.V12Battle || {
+/* ===== V13 battle presentation layer ===== */
+window.V13Battle = window.V13Battle || {
   running:false,
   async play(opts){
     if(this.running) return;

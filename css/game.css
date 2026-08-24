@@ -1135,3 +1135,34 @@ button, input, select, textarea {
 .v12-roundlog{font-size:17px;line-height:1.5;min-height:76px;max-height:116px;overflow:hidden}
 .v12-roundlog div{margin:3px 0}
 .v12-battle-note{font-size:16px;color:#b9ae8e;margin-top:6px}
+
+/* ===== V13 洞府真正全寬修正 ===== */
+#page-cave{display:none!important;width:100%!important;height:100%!important;overflow:hidden!important;padding:0 10px 6px!important}
+#page-cave.active{display:block!important}
+#page-cave .cave-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;width:100%!important;height:52px!important;margin:0 0 8px!important}
+#page-cave .subtab{width:100%!important;min-width:0!important;min-height:48px!important;font-size:19px!important;padding:6px 2px!important}
+#page-cave .cave-panel{display:none!important;width:100%!important;height:calc(100% - 60px)!important;overflow:hidden!important;margin:0!important;padding:0!important}
+#page-cave .cave-panel.active{display:block!important}
+#page-cave .compact-head{width:100%!important;height:46px!important;padding:2px 2px 7px!important}
+#page-cave .compact-head strong{font-size:24px!important}
+#page-cave .compact-head small{font-size:18px!important}
+#page-cave .fixed-grid{width:100%!important;max-width:none!important;margin:0!important}
+#page-cave .six-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,minmax(0,1fr))!important;height:calc(100% - 46px)!important}
+#page-cave .alchemy-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:minmax(0,1fr)!important;height:calc(100% - 46px)!important}
+#page-cave .equip-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 126px)!important}
+#page-cave .skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;height:calc(100% - 46px)!important}
+#page-cave .fixed-grid>*{min-width:0!important;width:auto!important}
+#page-cave .row-copy,#page-cave .recipe-copy{width:100%!important;min-width:0!important}
+#page-cave .row-copy b,#page-cave .recipe-copy b{font-size:20px!important;white-space:normal!important}
+#page-cave .row-copy small,#page-cave .recipe-copy small{font-size:17px!important;line-height:1.4!important;white-space:normal!important;overflow-wrap:anywhere!important}
+
+/* ===== V13 真正回合戰鬥 ===== */
+.v13-battle{border:1px solid #64552e;border-radius:14px;padding:10px;background:#0c0d0b;height:100%;box-sizing:border-box}
+.v13-battle-row{margin-bottom:9px}
+.v13-battle-head{display:flex;justify-content:space-between;gap:8px;font-size:18px;font-weight:700}
+.v13-hp{height:13px;border-radius:999px;overflow:hidden;background:#292923;margin-top:5px}
+.v13-hp i{display:block;height:100%;width:100%;transition:width .45s ease}
+.v13-player .v13-hp i{background:linear-gradient(90deg,#8b7436,#d4ba6a)}
+.v13-enemy .v13-hp i{background:linear-gradient(90deg,#7f2824,#ce6654)}
+.v13-turns{font-size:16px;line-height:1.45;height:70px;overflow:hidden;margin-top:7px;color:#d8cfbb}
+.v13-turns div{margin:2px 0}
