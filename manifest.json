@@ -1,0 +1,12 @@
+{
+  "name": "無盡仙途",
+  "short_name": "無盡仙途",
+  "description": "單機離線放置修仙遊戲",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090a09",
+  "theme_color": "#0d0d0c",
+  "orientation": "portrait",
+  "lang": "zh-Hant"
+}

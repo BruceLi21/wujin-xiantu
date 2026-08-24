@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0d0c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="無盡仙途" />
+  <title>無盡仙途 V0.7</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./css/game.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">凡人修仙 · 單機放置</div>
+        <h1>無盡仙途</h1>
+      </div>
+      <div class="top-actions">
+        <span class="version">V0.7</span>
+        <button id="resetBtn" class="ghost-btn" type="button">重置</button>
+      </div>
+    </header>
+    <section class="mobile-status">
+      <div><span>境界</span><strong id="mRealm">--</strong></div>
+      <div><span>修為</span><strong id="mCultivation">0</strong></div>
+      <div><span>靈石</span><strong id="mStone">0</strong></div>
+      <div><span>戰力</span><strong id="mPower">0</strong></div>
+    </section>
+
+
+    <section class="hero card">
+      <div class="portrait" aria-hidden="true">
+        <div class="moon"></div>
+        <div class="silhouette">仙</div>
+      </div>
+      <div class="hero-copy">
+        <div class="name-row">
+          <strong id="playerName">李柏儒</strong>
+          <span class="tag">散修</span>
+        </div>
+        <div class="realm" id="realmText">煉氣一層</div>
+        <div class="quote">「大道無情，我自逍遙。」</div>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat card"><span>修為</span><strong id="cultivationText">0</strong></div>
+      <div class="stat card"><span>靈石</span><strong id="stoneText">120</strong></div>
+      <div class="stat card"><span>修煉速度</span><strong id="rateText">+1 / 秒</strong></div>
+      <div class="stat card"><span>道心</span><strong id="daoHeartText">0</strong></div>
+    </section>
+
+    <section id="page-cultivation" class="page active">
+      <section class="card progress-card">
+        <div class="section-title">
+          <span>當前境界</span>
+          <strong id="progressLabel">0 / 100</strong>
+        </div>
+        <div class="bar"><div id="progressBar" class="bar-fill"></div></div>
+
+        <div class="breakthrough-panel">
+          <div class="breakthrough-row">
+            <span>突破成功率</span>
+            <strong id="breakthroughRate">--</strong>
+          </div>
+          <div class="small-grid">
+            <div><span>基礎</span><strong id="baseRate">--</strong></div>
+            <div><span>道心</span><strong id="daoBonus">--</strong></div>
+            <div><span>丹藥</span><strong id="pillBonus">+0%</strong></div>
+          </div>
+          <div class="breakthrough-tools">
+            <button id="usePillBtn" class="secondary-btn" type="button">使用築基丹</button>
+            <span id="pillCountText">×0</span>
+          </div>
+          <div id="injuryNotice" class="injury-notice hidden">內傷未癒：修煉效率 -30%，突破率 -15%</div>
+        </div>
+
+        <button id="breakthroughBtn" class="primary-btn" type="button" disabled>修為未滿</button>
+      </section>
+
+      <section class="card cultivation-card">
+        <div class="section-title">
+          <span>閉關修煉</span>
+          <strong id="runningStatus">吐納中</strong>
+        </div>
+        <p class="muted">關閉遊戲後仍會累積離線收益；恢復遊戲時自動補發。</p>
+        <div class="choice-grid">
+          <button class="mode-btn active" data-mode="breath" type="button">
+            <strong>吐納修煉</strong><small>修為效率最高</small>
+          </button>
+          <button class="mode-btn" data-mode="wander" type="button">
+            <strong>外出歷練</strong><small>修為較慢、靈石較多</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="card log-card">
+        <div class="section-title"><span>修行紀錄</span><button id="clearLogBtn" class="text-btn" type="button">清空</button></div>
+        <div id="logList" class="log-list" aria-live="polite"></div>
+      </section>
+    </section>
+
+    <section id="page-adventure" class="page">
+      <section class="card adventure-head">
+        <div class="section-title">
+          <span>歷練</span>
+          <strong id="energyText">體力 5 / 5</strong>
+        </div>
+        <p class="muted">每區累積 4 場勝利後出現 Boss；可單次或連續歷練。裝備具有品質與隨機詞條。</p>
+      </section>
+
+      <section class="card battle-card battle-card-top">
+        <div class="section-title">
+          <span>戰鬥紀錄</span>
+          <strong id="battleResult">尚未出戰</strong>
+        </div>
+        <div id="battleLog" class="battle-log">選擇一處地點開始歷練。</div>
+      </section>
+
+      <section id="zoneList" class="zone-list"></section>
+    </section>
+
+    <section id="page-cave" class="page">
+      <section class="card inventory-card">
+        <div class="section-title"><span>儲物袋</span><strong id="bagCount">0 種物品</strong></div>
+        <div id="inventoryList" class="inventory-list"></div>
+      </section>
+
+
+      <section class="card alchemy-card">
+        <div class="section-title"><span>煉丹</span><strong id="alchemyText">已煉 0 次</strong></div>
+        <p class="muted compact-help">材料足夠即可煉製；丹藥可使用或輔助突破。</p>
+        <details class="dev-box">
+          <summary>煉丹測試</summary>
+          <button id="testAlchemyBtn" class="secondary-btn" type="button">領取煉丹測試材料</button>
+        </details>
+        <div id="alchemyList" class="alchemy-list"></div>
+      </section>
+
+      <section class="card equipment-card">
+        <div class="section-title"><span>裝備</span><strong id="powerText">戰力 0</strong></div>
+        <p class="muted">品質：凡品 → 良品 → 上品 → 極品 → 靈器；品質越高，詞條與能力越強。</p>
+        <details class="dev-box">
+          <summary>開發測試</summary>
+          <button id="testGearBtn" class="secondary-btn" type="button">領取 V0.5 測試裝備</button>
+        </details>
+        <div id="equipmentSlots" class="equipment-slots"></div>
+        <div id="equipmentBag" class="equipment-bag"></div>
+      </section>
+
+      <section class="card skill-card">
+        <div class="section-title"><span>功法</span><strong id="skillCountText">0 / 3</strong></div>
+        <p class="muted">功法可提升至五重；升級需要靈石，並會提高戰力與修煉效率。最多裝備 3 本。</p>
+        <div id="skillList" class="skill-list"></div>
+      </section>
+    </section>
+
+    <section id="page-character" class="page">
+      <section class="card placeholder">
+        <h2>人物</h2>
+        <div class="character-grid">
+          <div><span>境界</span><strong id="charRealm">煉氣一層</strong></div>
+          <div><span>道心</span><strong id="charDao">0</strong></div>
+          <div><span>戰力</span><strong id="charPower">0</strong></div>
+          <div><span>擊敗妖獸</span><strong id="charKills">0</strong></div>
+          <div><span>觸發機緣</span><strong id="charEvents">0</strong></div>
+          <div><span>突破成功</span><strong id="charBreaks">0</strong></div><div><span>Boss 擊破</span><strong id="charBoss">0</strong></div><div><span>煉丹次數</span><strong id="charAlchemy">0</strong></div>
+        </div>
+      </section>
+    </section>
+
+    <nav class="bottom-nav" aria-label="主選單">
+      <button class="nav-btn active" data-page="cultivation" type="button"><span>☯</span>修煉</button>
+      <button class="nav-btn" data-page="adventure" type="button"><span>⚔</span>歷練</button>
+      <button class="nav-btn" data-page="cave" type="button"><span>⌂</span>洞府</button>
+      <button class="nav-btn" data-page="character" type="button"><span>人</span>角色</button>
+    </nav>
+  </main>
+
+  <dialog id="offlineDialog">
+    <form method="dialog" class="dialog-card">
+      <h2>閉關結束</h2>
+      <p id="offlineTimeText"></p>
+      <div class="offline-reward">
+        <div><span>修為</span><strong id="offlineCultivationText">+0</strong></div>
+        <div><span>靈石</span><strong id="offlineStoneText">+0</strong></div>
+      </div>
+      <button class="primary-btn" value="ok">收取</button>
+    </form>
+  </dialog>
+
+  <dialog id="eventDialog">
+    <form method="dialog" class="dialog-card">
+      <h2 id="eventTitle">機緣</h2>
+      <p id="eventText"></p>
+      <div id="eventRewards" class="event-rewards"></div>
+      <button class="primary-btn" value="ok">收下機緣</button>
+    </form>
+  </dialog>
+
+  <script type="module" src="./js/game.js"></script>
+</body>
+</html>

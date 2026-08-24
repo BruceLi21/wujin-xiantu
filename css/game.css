@@ -1,0 +1,197 @@
+:root{
+  color-scheme:dark;
+  --bg:#090a09; --panel:#121310; --line:#363329; --text:#f1ead9;
+  --muted:#aaa28f; --gold:#c7ac6a; --gold2:#8a7341; --green:#84a77a; --red:#b86f64;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#050605;color:var(--text);font-family:ui-serif,"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif}
+body{min-height:100%;background:radial-gradient(circle at 50% 8%,rgba(255,255,255,.06),transparent 28rem),linear-gradient(#090a09,#050605 70%)}
+button{font:inherit}
+.game-shell{width:min(100%,480px);margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 14px calc(92px + env(safe-area-inset-bottom))}
+.topbar{display:flex;align-items:end;justify-content:space-between;padding:6px 2px 16px}
+.top-actions{display:flex;gap:8px;align-items:center}.version{font-size:11px;color:var(--gold);border:1px solid var(--gold2);border-radius:999px;padding:5px 8px}
+.eyebrow{font-size:12px;color:var(--muted);letter-spacing:.18em}h1{font-size:28px;letter-spacing:.18em;margin:5px 0 0}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(24,25,21,.96),rgba(14,15,13,.96));border-radius:16px;box-shadow:inset 0 1px rgba(255,255,255,.03)}
+.hero{min-height:220px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:18px}.hero:after{content:"";position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,rgba(0,0,0,.72))}
+.portrait{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}.moon{width:165px;height:165px;border:16px solid rgba(220,213,192,.12);border-radius:50%}.silhouette{position:absolute;font-size:108px;color:rgba(235,229,211,.2)}
+.hero-copy{z-index:1}.name-row{display:flex;align-items:center;gap:10px;font-size:22px}.tag{font-size:12px;border:1px solid var(--gold2);border-radius:999px;color:var(--gold);padding:4px 9px}.realm{margin-top:6px;color:#d8cfbb}.quote{margin-top:12px;color:#9c9481;font-size:13px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.stat{padding:14px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;margin-top:5px;font-size:19px}
+.page{display:none}.page.active{display:block}
+.progress-card,.cultivation-card,.log-card,.adventure-head,.battle-card,.inventory-card,.equipment-card,.skill-card,.placeholder{padding:16px;margin-top:10px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.section-title>span{font-size:16px;font-weight:700}.section-title>strong{color:var(--gold);font-size:14px}
+.bar{height:10px;background:#24241f;border-radius:999px;overflow:hidden;margin:14px 0}.bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold2),#d8c080);transition:width .3s ease}
+.breakthrough-panel{border:1px solid #2b2b25;border-radius:12px;padding:12px;margin-bottom:12px;background:#0d0e0c}
+.breakthrough-row{display:flex;justify-content:space-between}.breakthrough-row strong{color:var(--gold)}
+.small-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.small-grid div{background:#11120f;border-radius:9px;padding:8px}.small-grid span{display:block;color:var(--muted);font-size:11px}.small-grid strong{display:block;margin-top:3px;font-size:13px}
+.breakthrough-tools{display:flex;align-items:center;gap:10px;margin-top:10px}.breakthrough-tools span{color:var(--gold)}
+.injury-notice{margin-top:10px;padding:9px;border:1px solid #573b35;color:#d79588;border-radius:9px;font-size:12px}.hidden{display:none}
+.primary-btn,.secondary-btn,.ghost-btn,.mode-btn,.nav-btn,.text-btn,.zone-btn,.equip-btn,.skill-btn{border:0;cursor:pointer}
+.primary-btn{width:100%;min-height:48px;border-radius:12px;background:linear-gradient(#b49758,#765f32);color:#fff9e8;font-weight:800;letter-spacing:.08em}.primary-btn:disabled{opacity:.38;cursor:not-allowed}
+.secondary-btn{min-height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--gold2);background:#161712;color:var(--text)}.secondary-btn:disabled{opacity:.35}
+.ghost-btn{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.muted{color:var(--muted);font-size:13px;line-height:1.7}.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mode-btn{text-align:left;padding:13px;background:#0e0f0d;color:var(--text);border:1px solid var(--line);border-radius:12px}.mode-btn strong,.mode-btn small{display:block}.mode-btn small{margin-top:5px;color:var(--muted)}.mode-btn.active{border-color:var(--gold2);box-shadow:inset 0 0 0 1px rgba(199,172,106,.18)}
+.log-list{display:grid;gap:8px;margin-top:12px;max-height:220px;overflow:auto}.log-item{padding:10px;border-left:2px solid var(--gold2);background:rgba(255,255,255,.025);font-size:13px;color:#cfc7b4;line-height:1.55}.text-btn{background:transparent;color:var(--gold);padding:4px}
+.zone-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.zone-card{padding:14px}.zone-top{display:flex;justify-content:space-between;gap:12px}.zone-card h3{margin:0 0 6px;font-size:17px}.zone-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.zone-level{color:var(--gold);font-size:12px}.zone-btn{margin-top:12px;width:100%;min-height:44px;border-radius:10px;background:#171813;border:1px solid var(--gold2);color:var(--text)}.zone-btn:disabled{opacity:.35}
+.battle-log{margin-top:12px;min-height:110px;white-space:pre-line;color:#cfc7b4;line-height:1.65;font-size:13px}
+.inventory-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.equipment-bag,.skill-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.item-row,.equip-row,.skill-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px;border:1px solid #292921;border-radius:10px;background:#0d0e0c}.item-row strong,.equip-row strong,.skill-row strong{color:var(--gold)}.row-copy{min-width:0}.row-copy b,.row-copy small{display:block}.row-copy small{color:var(--muted);margin-top:4px;line-height:1.4}
+.equipment-slots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.slot{padding:10px;background:#0d0e0c;border:1px solid #292921;border-radius:10px}.slot span,.slot strong{display:block}.slot span{color:var(--muted);font-size:11px}.slot strong{margin-top:4px}
+.equip-btn,.skill-btn{min-height:36px;border-radius:9px;padding:0 10px;background:#171813;border:1px solid var(--gold2);color:var(--text);white-space:nowrap}
+.empty{color:var(--muted);font-size:13px;padding:8px 0}.character-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.character-grid>div{padding:12px;background:#0d0e0c;border:1px solid #292921;border-radius:10px}.character-grid span,.character-grid strong{display:block}.character-grid span{color:var(--muted);font-size:12px}.character-grid strong{margin-top:4px}
+.bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,480px);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px max(8px,env(safe-area-inset-bottom));background:rgba(7,8,7,.96);border-top:1px solid var(--line);backdrop-filter:blur(12px);z-index:20}.nav-btn{min-height:58px;background:transparent;color:#766f60;display:grid;gap:3px;place-items:center;font-size:12px}.nav-btn span{font-size:21px}.nav-btn.active{color:var(--gold)}
+dialog{border:0;padding:0;background:transparent;color:var(--text)}dialog::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(4px)}.dialog-card{width:min(88vw,390px);border:1px solid var(--gold2);border-radius:16px;background:#11120f;padding:22px}.dialog-card h2{margin:0 0 8px}.offline-reward{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.offline-reward>div{padding:12px;background:#0b0c0a;border:1px solid var(--line);border-radius:10px}.offline-reward span,.offline-reward strong{display:block}.offline-reward span{color:var(--muted);font-size:12px}.offline-reward strong{font-size:20px;margin-top:4px;color:var(--gold)}.event-rewards{margin:14px 0;padding:12px;border:1px solid #302d24;border-radius:10px;background:#0d0e0c;line-height:1.7;color:#d8cfbb}
+@media (orientation: landscape) and (max-height: 500px){body:before{content:"請將手機轉回直式";position:fixed;inset:0;z-index:999;background:#070807;color:#efe6cf;display:grid;place-items:center;font-size:20px;letter-spacing:.1em}}
+
+.dev-box{margin:10px 0 4px;border:1px dashed #3b392f;border-radius:10px;padding:9px;color:var(--muted)}
+.dev-box summary{cursor:pointer;margin-bottom:8px}
+.quality-common{color:#c9c2b0}.quality-good{color:#83ad7a}.quality-superior{color:#79a8c9}.quality-exquisite{color:#b28bd1}.quality-spirit{color:#d5b25d}
+.gear-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.gear-chip{font-size:11px;padding:2px 6px;border:1px solid #34342c;border-radius:999px;color:#bdb49f}
+.zone-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.zone-actions .zone-btn{margin-top:0}
+.boss-line{margin-top:10px;padding:8px 10px;border:1px solid #5a4927;border-radius:9px;background:#17130c;color:#d7bd77;font-size:12px}
+.boss-btn{background:linear-gradient(#332413,#1a120b)!important;border-color:#9b7131!important}
+.alchemy-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.recipe-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:11px;border:1px solid #292921;border-radius:10px;background:#0d0e0c}
+.recipe-copy{min-width:0}.recipe-copy b,.recipe-copy small{display:block}.recipe-copy small{margin-top:4px;color:var(--muted);line-height:1.45}
+.recipe-btn,.item-use-btn,.skill-upgrade-btn{min-height:36px;border-radius:9px;padding:0 10px;background:#171813;border:1px solid var(--gold2);color:var(--text);white-space:nowrap;cursor:pointer}
+.recipe-btn:disabled,.item-use-btn:disabled,.skill-upgrade-btn:disabled{opacity:.35;cursor:not-allowed}
+.item-actions{display:flex;align-items:center;gap:8px}.skill-actions{display:flex;flex-direction:column;gap:6px;align-items:stretch}.skill-level{font-size:11px;color:var(--gold);margin-top:2px}
+
+.battle-card-top{margin-bottom:10px}
+
+/* V0.6 直式手機緊湊雙欄 */
+.compact-help{margin:6px 0 8px;line-height:1.45}
+.battle-card-top{padding:12px;margin-top:8px;margin-bottom:8px}
+.battle-log{min-height:64px;max-height:110px;overflow:auto;font-size:12px;line-height:1.45;margin-top:8px}
+
+.zone-card{padding:10px;min-width:0}
+.zone-top{display:block}
+.zone-card h3{font-size:15px;margin:0 0 3px}
+.zone-card p{font-size:11px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zone-level{font-size:11px;margin-top:6px}
+.zone-actions{grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+.zone-btn{min-height:38px;font-size:12px;padding:5px}
+.boss-line{font-size:11px;padding:6px 7px;margin-top:7px}
+
+.recipe-row,.equip-row,.skill-row,.item-row{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:7px;
+  min-width:0;
+  padding:9px;
+}
+.recipe-copy b,.row-copy b{font-size:14px}
+.recipe-copy small,.row-copy small{font-size:11px;line-height:1.35}
+.recipe-btn,.equip-btn,.skill-btn,.skill-upgrade-btn,.item-use-btn{width:100%;min-height:34px;font-size:12px}
+.item-actions{justify-content:space-between}
+.skill-actions{display:grid;grid-template-columns:1fr;gap:5px}
+.gear-meta{gap:4px}
+.gear-chip{font-size:10px;padding:2px 5px}
+.equipment-slots{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.slot{padding:8px}
+.slot span{font-size:10px}
+.slot strong{font-size:12px;word-break:break-word}
+
+.alchemy-card,.equipment-card,.skill-card,.inventory-card{padding:12px;margin-top:8px}
+.dev-box{margin:6px 0}
+.section-title>span{font-size:15px}
+.section-title>strong{font-size:12px}
+
+@media (max-width:360px){
+  .game-shell{padding-left:8px;padding-right:8px}
+  .zone-list,.alchemy-list,.equipment-bag,.skill-list,.inventory-list{gap:6px}
+  .zone-card,.recipe-row,.equip-row,.skill-row,.item-row{padding:8px}
+  .zone-card h3{font-size:14px}
+}
+
+/* V0.7 手機單屏式 UI 重構 */
+html,body{height:100%;overflow:hidden}
+body{overscroll-behavior:none}
+.game-shell{
+  height:100dvh;
+  max-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  padding-bottom:0!important;
+}
+.app-header{flex:0 0 auto;padding-top:10px;padding-bottom:6px}
+.mobile-status{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:5px;
+  margin:0 12px 7px;
+}
+.mobile-status>div{
+  border:1px solid #39372d;
+  border-radius:8px;
+  padding:5px 4px;
+  text-align:center;
+  min-width:0;
+  background:#0d0e0c;
+}
+.mobile-status span{display:block;font-size:9px;color:#9c9279}
+.mobile-status strong{
+  display:block;
+  margin-top:2px;
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  color:#ead7a0;
+}
+main,.main-content{
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+}
+.page{
+  height:100%;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  padding:0 12px 12px;
+}
+.page::-webkit-scrollbar{width:3px}
+.bottom-nav{
+  position:relative!important;
+  bottom:auto!important;
+  left:auto!important;
+  right:auto!important;
+  flex:0 0 auto;
+  width:100%;
+  z-index:50;
+  padding-bottom:max(7px,env(safe-area-inset-bottom));
+  background:#080906;
+}
+.card{margin-top:7px!important;padding:10px!important;border-radius:11px}
+.hero-card{min-height:auto!important;padding:11px!important}
+.hero-card .seal{transform:scale(.72);transform-origin:center}
+.stat-grid{gap:6px!important}
+.stat-card{padding:8px!important;min-height:auto!important}
+.breakthrough-card{padding:10px!important}
+.breakthrough-detail{gap:5px!important}
+.mode-card{padding:10px!important}
+.zone-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+.zone-card{min-height:145px;display:flex;flex-direction:column}
+.zone-actions{margin-top:auto!important}
+.battle-card-top{position:sticky;top:0;z-index:10;background:#10110e}
+.battle-log{max-height:72px!important;min-height:48px!important}
+.inventory-list,.alchemy-list,.equipment-bag,.skill-list{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+.inventory-list .item-row,.alchemy-list .recipe-row,.equipment-bag .equip-row,.skill-list .skill-row{
+  min-height:118px;
+}
+.equipment-slots{position:sticky;top:0;z-index:9;background:#0b0c09;padding:5px 0}
+.dev-box{font-size:11px}
+.muted{font-size:11px}
+.section-title{margin-bottom:4px}
+.log-list{max-height:160px;overflow:auto}
+@media (min-width:600px){
+  .game-shell{max-width:480px;margin:0 auto}
+}
