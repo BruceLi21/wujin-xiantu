@@ -1,5 +1,5 @@
 無盡仙途
-Version: V21
-UI: General Mobile Cultivation RPG
-Cultivation Ceiling: 渡劫期
+Version: V23
+境界上限: 渡劫期
+突破丹藥: 依大境界自動切換
 Save DB: wujin-xiantu-db

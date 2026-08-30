@@ -33,6 +33,36 @@ const realms=[
 {name:"大乘後期",need:30400000,rate:1900,br:.14,power:9100},
 {name:"渡劫期",need:40000000,rate:2300,br:.12,power:10800}
 ];
+/* V23：大境界突破丹藥對應。小境界突破不消耗大境界丹。 */
+const breakthroughPills = {
+  "煉氣": { target:"築基", item:"築基丹", bonus:20 },
+  "築基": { target:"結丹", item:"結金丹", bonus:20 },
+  "結丹": { target:"元嬰", item:"凝嬰丹", bonus:20 },
+  "元嬰": { target:"化神", item:"化神丹", bonus:20 },
+  "化神": { target:"煉虛", item:"煉虛丹", bonus:20 },
+  "煉虛": { target:"合體", item:"合體丹", bonus:20 },
+  "合體": { target:"大乘", item:"大乘丹", bonus:20 },
+  "大乘": { target:"渡劫", item:"渡劫丹", bonus:20 }
+};
+function majorRealmName(name){
+  return ["煉氣","築基","結丹","元嬰","化神","煉虛","合體","大乘","渡劫"].find(x=>name.includes(x)) || name;
+}
+function breakthroughPillInfo(){
+  const cur = realms[Math.min(state.realm, realms.length-1)];
+  const nxt = realms[Math.min(state.realm+1, realms.length-1)];
+  if(!cur || !nxt || cur===nxt) return null;
+  const a=majorRealmName(cur.name), b=majorRealmName(nxt.name);
+  if(a===b) return null;
+  const info=breakthroughPills[a];
+  return info && info.target===b ? info : null;
+}
+function ensureBreakthroughPillItems(){
+  if(!state.items) state.items={};
+  ["築基丹","結金丹","凝嬰丹","化神丹","煉虛丹","合體丹","大乘丹","渡劫丹"].forEach(k=>{
+    if(state.items[k] == null) state.items[k]=0;
+  });
+}
+
 const zones=[
 {id:"green",name:"青石坡",desc:"山腳妖氣淡薄，適合初入仙途者。",min:0,d:5,mon:["灰背野豬","山魈"],boss:"鐵鬃王",mats:["青靈草","狼牙"]},
 {id:"black",name:"黑木林",desc:"林中常有低階妖獸與採藥人出沒。",min:2,d:9,mon:["黑木狼","毒牙蛇"],boss:"黑木妖狼王",mats:["青靈草","蛇膽"]},
@@ -79,11 +109,12 @@ function stoneRate(){return state.mode==="wander"?.12:.025}
 function brChance(){if(state.realmIndex>=realms.length-1)return 0;return Math.max(.05,Math.min(.99,realm().br+Math.min(.2,state.daoHeart*.01)+state.activePillBonus-(Date.now()<state.injuryUntil?.15:0)))}
 function apply(sec){state.cultivation+=rate()*sec;state.spiritStone+=stoneRate()*sec}
 function render(){
+  ensureBreakthroughPillItems();
  const r=realm(),p=power(),pct=Math.min(100,state.cultivation/r.need*100);
  if($("caveStone"))$("caveStone").textContent=fmt(state.spiritStone);
  if($("caveCult"))$("caveCult").textContent=fmt(state.cultivation);
  if($("cavePower"))$("cavePower").textContent=p;
- if($("charHeroRealm"))$("charHeroRealm").textContent=r.name;
+ if($("charHeroRealm"))if($("charHeroRealm"))$("charHeroRealm").textContent=r.name;
  if($("charHeroPower"))$("charHeroPower").textContent=p;
  if($("charEquipSummary")){
    const labels={weapon:"武器",armor:"法衣",accessory:"飾品"};
@@ -155,7 +186,7 @@ $("clearLog").onclick=async()=>{state.logs=[];render();await writeSave()};$("ren
 $("reset").onclick=async()=>{if(!confirm("確定重置所有進度？"))return;state=defaults();render();await writeSave()}
 async function boot(){db=await openDB();state=migrate(await readSave());const now=Date.now(),elapsed=Math.max(0,Math.min(OFFLINE_CAP,(now-(state.lastSavedAt||now))/1000));if(elapsed>=10){apply(elapsed);$("offlineText").textContent=`離線 ${Math.floor(elapsed/3600)} 小時 ${Math.floor((elapsed%3600)/60)} 分鐘，收益已自動加入。`;offline.showModal()}state.lastTickAt=now;render();await writeSave();
  setInterval(async()=>{const t=Date.now(),d=Math.max(0,Math.min(5,(t-state.lastTickAt)/1000));state.lastTickAt=t;apply(d);render();if(Math.floor(t/5000)!==Math.floor((t-1000)/5000))await writeSave()},1000)}
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=21",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=23",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 boot().catch(e=>{console.error(e);alert("遊戲初始化失敗，請重新整理頁面。")})
 if($("quickBattleBtn"))$("quickBattleBtn").onclick=()=>{
   const z=zones[Math.min(zones.length-1,ui.zonePage*2)];

@@ -1,5 +1,5 @@
-const CACHE="wujin-xiantu-v21-cache";
-const FALLBACK="./index.html?v=21";
+const CACHE="wujin-xiantu-v23-cache";
+const FALLBACK="./index.html?v=23";
 self.addEventListener("install",e=>self.skipWaiting());
 self.addEventListener("activate",e=>{
   e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
