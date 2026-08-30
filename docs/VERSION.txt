@@ -1,0 +1,6 @@
+無盡仙途
+Version: V19
+Build: Complete Project Package
+Target: Windows Browser / iPhone Browser / GitHub Pages
+Save: IndexedDB
+Offline: Service Worker

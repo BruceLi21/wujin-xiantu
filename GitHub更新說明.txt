@@ -1,0 +1,11 @@
+無盡仙途 V19 GitHub 更新方式
+
+1. 解壓縮完整專案包。
+2. 將專案內檔案覆蓋到 GitHub Repository。
+3. Commit changes。
+4. GitHub Pages 更新後開啟網址並加上 ?v=19。
+5. 後續版本依既定規則直接升大版本，例如 V19 → V20。
+
+重要：
+請保留 IndexedDB 名稱 wujin-xiantu-db，
+以及 store=save、key=main-save，以便延續玩家存檔。
