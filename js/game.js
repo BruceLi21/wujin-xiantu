@@ -1,12 +1,37 @@
 const DB_NAME="wujin-xiantu-db", STORE="save", KEY="main-save", OFFLINE_CAP=86400;
 const $=id=>document.getElementById(id), fmt=n=>Math.floor(n).toLocaleString("zh-TW");
 const realms=[
-{name:"煉氣一層",need:100,rate:1,br:.92,power:10},{name:"煉氣二層",need:240,rate:1.4,br:.88,power:14},
-{name:"煉氣三層",need:520,rate:1.9,br:.84,power:19},{name:"煉氣四層",need:900,rate:2.5,br:.80,power:25},
-{name:"煉氣五層",need:1500,rate:3.2,br:.76,power:32},{name:"煉氣六層",need:2400,rate:4.1,br:.72,power:41},
-{name:"煉氣七層",need:3800,rate:5.2,br:.68,power:52},{name:"煉氣八層",need:6000,rate:6.5,br:.64,power:65},
-{name:"煉氣九層",need:9200,rate:8,br:.55,power:80},{name:"築基初期",need:14000,rate:10.5,br:.70,power:105},
-{name:"築基中期",need:26000,rate:14.7,br:.62,power:135},{name:"築基後期",need:42000,rate:20.5,br:.55,power:175}
+{name:"煉氣一層",need:100,rate:1,br:.92,power:10},
+{name:"煉氣二層",need:240,rate:1.4,br:.88,power:14},
+{name:"煉氣三層",need:520,rate:1.9,br:.84,power:19},
+{name:"煉氣四層",need:900,rate:2.5,br:.80,power:25},
+{name:"煉氣五層",need:1500,rate:3.2,br:.76,power:32},
+{name:"煉氣六層",need:2400,rate:4.1,br:.72,power:41},
+{name:"煉氣七層",need:3800,rate:5.2,br:.68,power:52},
+{name:"煉氣八層",need:6000,rate:6.5,br:.64,power:65},
+{name:"煉氣九層",need:9200,rate:8,br:.58,power:80},
+{name:"築基初期",need:14000,rate:10.5,br:.72,power:105},
+{name:"築基中期",need:26000,rate:14.7,br:.66,power:135},
+{name:"築基後期",need:42000,rate:20.5,br:.60,power:175},
+{name:"結丹初期",need:70000,rate:28,br:.58,power:230},
+{name:"結丹中期",need:110000,rate:38,br:.54,power:300},
+{name:"結丹後期",need:170000,rate:51,br:.50,power:390},
+{name:"元嬰初期",need:260000,rate:68,br:.48,power:510},
+{name:"元嬰中期",need:390000,rate:90,br:.44,power:660},
+{name:"元嬰後期",need:580000,rate:118,br:.40,power:850},
+{name:"化神初期",need:850000,rate:154,br:.38,power:1080},
+{name:"化神中期",need:1250000,rate:200,br:.35,power:1360},
+{name:"化神後期",need:1800000,rate:258,br:.32,power:1700},
+{name:"煉虛初期",need:2600000,rate:330,br:.30,power:2100},
+{name:"煉虛中期",need:3700000,rate:420,br:.28,power:2580},
+{name:"煉虛後期",need:5200000,rate:530,br:.26,power:3150},
+{name:"合體初期",need:7200000,rate:665,br:.24,power:3820},
+{name:"合體中期",need:9800000,rate:830,br:.22,power:4600},
+{name:"合體後期",need:13200000,rate:1030,br:.20,power:5500},
+{name:"大乘初期",need:17600000,rate:1270,br:.18,power:6500},
+{name:"大乘中期",need:23200000,rate:1560,br:.16,power:7700},
+{name:"大乘後期",need:30400000,rate:1900,br:.14,power:9100},
+{name:"渡劫期",need:40000000,rate:2300,br:.12,power:10800}
 ];
 const zones=[
 {id:"green",name:"青石坡",desc:"山腳妖氣淡薄，適合初入仙途者。",min:0,d:5,mon:["灰背野豬","山魈"],boss:"鐵鬃王",mats:["青靈草","狼牙"]},
@@ -15,6 +40,11 @@ const zones=[
 {id:"red",name:"赤霞崖",desc:"赤霞照壁，偶有築基修士遺物現世。",min:6,d:22,mon:["赤羽鷹","火蜥"],boss:"赤霞妖鷹",mats:["紫靈草","下品妖丹"]},
 {id:"ruin",name:"古修遺跡",desc:"築基後方可深入，殘陣中藏有古修功法。",min:9,d:32,mon:["傀儡守衛","殘魂"],boss:"古修殘魂",mats:["下品妖丹","玄鐵"]},
 {id:"abyss",name:"幽冥澗",desc:"陰煞之氣濃重，唯根基深厚者可行。",min:10,d:42,mon:["幽冥鬼卒","噬魂獸"],boss:"幽冥鬼王",mats:["玄鐵","紫靈草"]}
+,
+{id:"cloud",name:"雲海天關",desc:"罡風如刃，唯結丹以上修士可安然通行。",min:12,d:58,mon:["裂空鷹","罡風靈獸"],boss:"雲海天君",mats:["玄鐵","紫靈草"]},
+{id:"star",name:"星隕古域",desc:"元嬰修士歷練之地，殘星之力可淬鍊神魂。",min:15,d:78,mon:["星隕獸","古域殘魂"],boss:"星隕魔君",mats:["下品妖丹","玄鐵"]},
+{id:"void",name:"虛空裂境",desc:"化神之後方可踏足，空間裂隙遍佈。",min:18,d:105,mon:["虛空螟","裂界魔靈"],boss:"虛空尊者",mats:["玄鐵","紫靈草"]},
+{id:"heaven",name:"登天古路",desc:"大乘修士問道之地，盡頭便是渡劫天門。",min:27,d:145,mon:["天門守將","雷劫化靈"],boss:"九霄雷君",mats:["下品妖丹","玄鐵"]}
 ];
 const gearDefs={
 "青竹劍":{slot:"weapon",power:12,rate:.04},"玄鐵短劍":{slot:"weapon",power:22,rate:.06},
@@ -53,7 +83,6 @@ function render(){
  if($("caveStone"))$("caveStone").textContent=fmt(state.spiritStone);
  if($("caveCult"))$("caveCult").textContent=fmt(state.cultivation);
  if($("cavePower"))$("cavePower").textContent=p;
- if($("charHeroName"))$("charHeroName").textContent=state.playerName;
  if($("charHeroRealm"))$("charHeroRealm").textContent=r.name;
  if($("charHeroPower"))$("charHeroPower").textContent=p;
  if($("charEquipSummary")){
@@ -126,7 +155,7 @@ $("clearLog").onclick=async()=>{state.logs=[];render();await writeSave()};$("ren
 $("reset").onclick=async()=>{if(!confirm("確定重置所有進度？"))return;state=defaults();render();await writeSave()}
 async function boot(){db=await openDB();state=migrate(await readSave());const now=Date.now(),elapsed=Math.max(0,Math.min(OFFLINE_CAP,(now-(state.lastSavedAt||now))/1000));if(elapsed>=10){apply(elapsed);$("offlineText").textContent=`離線 ${Math.floor(elapsed/3600)} 小時 ${Math.floor((elapsed%3600)/60)} 分鐘，收益已自動加入。`;offline.showModal()}state.lastTickAt=now;render();await writeSave();
  setInterval(async()=>{const t=Date.now(),d=Math.max(0,Math.min(5,(t-state.lastTickAt)/1000));state.lastTickAt=t;apply(d);render();if(Math.floor(t/5000)!==Math.floor((t-1000)/5000))await writeSave()},1000)}
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=20",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./service-worker.js?v=21",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}
 boot().catch(e=>{console.error(e);alert("遊戲初始化失敗，請重新整理頁面。")})
 if($("quickBattleBtn"))$("quickBattleBtn").onclick=()=>{
   const z=zones[Math.min(zones.length-1,ui.zonePage*2)];

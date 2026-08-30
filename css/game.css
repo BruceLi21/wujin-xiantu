@@ -377,3 +377,21 @@ html,body{
   .adventure-scene{min-height:102px}
   .battle{height:174px}.battlebody{height:132px}
 }
+
+/* V21 角色頁：避免姓名重複 */
+.hero-info span#charHeroRealm{
+  display:block;
+  font-size:22px;
+  font-weight:800;
+  color:#173441;
+  margin:0 0 4px;
+}
+.hero-info small{
+  font-size:14px;
+}
+.rename{
+  margin-top:2px;
+}
+.rename input::placeholder{
+  color:#95a0a3;
+}

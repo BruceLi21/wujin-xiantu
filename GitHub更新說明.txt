@@ -1,8 +1,13 @@
-V20 GitHub 更新：
-1. 將本資料夾內所有檔案/資料夾覆蓋到 wujin-xiantu Repository 根目錄。
+V21 GitHub 更新：
+
+1. 將本資料夾內所有檔案與資料夾覆蓋到 wujin-xiantu Repository 根目錄。
 2. Commit changes。
 3. 等 GitHub Pages 部署完成。
-4. 開啟網址並加 ?v=20 強制新版。
+4. 使用 ?v=21 開啟新版。
 
-注意：
+本版重點：
+- 角色頁不再重複顯示姓名。
+- 境界上限提高到「渡劫期」。
+- 新增高階歷練區域。
+
 請保留 IndexedDB 名稱 wujin-xiantu-db，以沿用舊存檔。
